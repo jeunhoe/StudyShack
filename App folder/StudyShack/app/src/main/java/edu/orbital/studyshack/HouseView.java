@@ -1,9 +1,8 @@
 package edu.orbital.studyshack;
 
-import android.os.CountDownTimer;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -50,6 +49,10 @@ public class HouseView extends AppCompatActivity {
                     mEditTextInput.setVisibility(View.VISIBLE);
                 } else {
                     String timeString = mEditTextInput.getText().toString();
+                    if (timeString.isEmpty()) {
+                        Toast.makeText(getApplicationContext(), "Please input a time", Toast.LENGTH_LONG).show();
+                        return;
+                    }
                     mStartTimeInMillis = Long.parseLong(timeString) * 60 * 1000;
                     mTimeLeftInMillis = mStartTimeInMillis;
                     startTimer();
