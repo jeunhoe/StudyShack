@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">StudyShack</string>
+    <string name="statistics_label">Statistics</string>
+    <string name="houses_label">Houses</string>
+</resources>
