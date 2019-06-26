@@ -9,17 +9,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity
+            android:name=".AddHouse"
+            android:parentActivityName=".HouseCardview" />
 
         <activity
             android:name=".HouseView"
-            android:parentActivityName=".HouseCardview"
-            />
-
+            android:parentActivityName=".HouseCardview" />
         <activity android:name=".Statistics" />
-
         <activity
             android:name=".HouseCardview"
-            android:parentActivityName=".Homepage"/>
+            android:parentActivityName=".Homepage" />
         <activity android:name=".Homepage">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

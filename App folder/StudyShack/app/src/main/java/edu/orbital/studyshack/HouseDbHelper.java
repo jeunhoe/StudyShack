@@ -5,24 +5,24 @@ package edu.orbital.studyshack;
         import android.database.sqlite.SQLiteOpenHelper;
 
 public class HouseDbHelper extends SQLiteOpenHelper {
-    private String TableName = "HouseInputs";
-    private String KEY_ID = "id";
-    private String KEY_DAY = "day";
-    private String KEY_MONTH = "month";
-    private String KEY_YEAR = "year";
-    private String KEY_HOUR = "hour";
-    private String KEY_MINS = "minutes";
-    private String KEY_NAME = "housename";
-    private String KEY_INPUT = "input";
+    public static final String TABLE_NAME = "HouseInputs";
+    public static final String KEY_ID = "id";
+    public static final String KEY_DAY = "day";
+    public static final String KEY_MONTH = "month";
+    public static final String KEY_YEAR = "year";
+    public static final String KEY_HOUR = "hour";
+    public static final String KEY_MINS = "minutes";
+    public static final String KEY_NAME = "housename";
+    public static final String KEY_INPUT = "input";
 
 
     public HouseDbHelper(Context context) {
-        super(context, TableName, null, 1);
+        super(context, TABLE_NAME, null, 1);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String cmd = "create table " + TableName + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+        String cmd = "create table " + TABLE_NAME + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 KEY_DAY + " INTEGER," + KEY_MONTH + " INTEGER," + KEY_YEAR + " INTEGER," +
                 KEY_HOUR+ " INTEGER," + KEY_MINS + " INTEGER," + KEY_NAME + " TEXT,"
                 + KEY_INPUT + " TEXT)";
@@ -31,7 +31,7 @@ public class HouseDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("drop table if exists " + TableName);
+        db.execSQL("drop table if exists " + TABLE_NAME);
         onCreate(db);
     }
 }
