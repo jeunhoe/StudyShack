@@ -18,8 +18,8 @@ public class HouseLevelDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String cmd = "create table " + TABLE_NAME + "(" + KEY_ID + " INTEGER PRIMARY KEY," +
-                KEY_NAME + " TEXT," + KEY_DESC + " TEXT" + KEY_LEVEL + " INTEGER)";
+        String cmd = "create table " + TABLE_NAME + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                KEY_NAME + " TEXT," + KEY_DESC + " TEXT," + KEY_LEVEL + " INTEGER)";
         db.execSQL(cmd);
     }
 

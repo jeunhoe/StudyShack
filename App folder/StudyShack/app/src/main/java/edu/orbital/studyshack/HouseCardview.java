@@ -27,7 +27,7 @@ public class HouseCardview extends AppCompatActivity {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), HouseView.class);
+                Intent intent = new Intent(getApplicationContext(), AddHouse.class);
                 startActivity(intent);
             }
         });

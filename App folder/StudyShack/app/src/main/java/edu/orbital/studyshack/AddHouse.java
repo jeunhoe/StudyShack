@@ -36,6 +36,7 @@ public class AddHouse extends AppCompatActivity {
 
         dbH = new HouseLevelDbHelper(this);
         db = dbH.getWritableDatabase();
+
     }
 
     public void createHouse(View view) {
@@ -43,27 +44,27 @@ public class AddHouse extends AppCompatActivity {
         String desc = mDescEditText.getText().toString();
 
         if (name.equals("") || desc.equals("")) {
-            Toast.makeText(getApplicationContext(), "Please input a valid name/description", Toast.LENGTH_LONG);
+            Toast.makeText(getApplicationContext(), "Please input a valid name/description", Toast.LENGTH_LONG).show();
             return;
         } else if (name.length() > 20) {
-            Toast.makeText(getApplicationContext(), "Please shorten name to max 20 characters", Toast.LENGTH_LONG);
+            Toast.makeText(getApplicationContext(), "Please shorten name to max 20 characters", Toast.LENGTH_LONG).show();
             return;
         } else if (desc.length() > 50) {
-            Toast.makeText(getApplicationContext(), "Please shorten description to max 50 characters", Toast.LENGTH_LONG);
+            Toast.makeText(getApplicationContext(), "Please shorten description to max 50 characters", Toast.LENGTH_LONG).show();
             return;
         }
 
         ContentValues values = new ContentValues();
-        values.put(HouseLevelDbHelper.KEY_ID, name);
+        values.put(HouseLevelDbHelper.KEY_NAME, name);
         values.put(HouseLevelDbHelper.KEY_DESC, desc);
         values.put(HouseLevelDbHelper.KEY_LEVEL, 1);
 
         // make sure to error correct, dun allow duplicates (not done yet)
         long row = db.insert(HouseLevelDbHelper.TABLE_NAME, null, values);
-        if (row > 0) {
-            Toast.makeText(getApplicationContext(), "House added!", Toast.LENGTH_LONG);
+        if (row == -1) {
+            Toast.makeText(getApplicationContext(), "Error! Please try again.", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(getApplicationContext(), "Error! Please try again.", Toast.LENGTH_LONG);
+            Toast.makeText(getApplicationContext(), "House added!", Toast.LENGTH_LONG).show();
         }
     }
 }
