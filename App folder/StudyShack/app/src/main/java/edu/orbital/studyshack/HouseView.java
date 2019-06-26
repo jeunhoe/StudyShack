@@ -26,6 +26,12 @@ public class HouseView extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        //instantiate both database
+        //pull needed data  from inpu
+        //query max level
+        //make house object using levledatabase
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_house_view);
         upButton = findViewById(R.id.house_view_up_button);
