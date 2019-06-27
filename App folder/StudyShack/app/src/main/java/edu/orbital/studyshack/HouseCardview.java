@@ -49,10 +49,10 @@ public class HouseCardview extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        houses = new LinkedList<>();
 
         Cursor c = db.rawQuery("select * from " + HouseLevelDbHelper.TABLE_NAME, null);
         //Lyndon, need u to retrieve database and put all the houses into the linked list
-        houses = new LinkedList<>();
 
         while(c.moveToNext()){
             String name = c.getString(1);
@@ -61,9 +61,6 @@ public class HouseCardview extends AppCompatActivity {
             houses.add(new House(name, desc, lvl, 0));
         }
 
-//        houses.add(new House("CS2030", "Henry chia got us good", 2, 60));
-//        houses.add(new House("CS2040", "old fck", 3, 60));
-//        houses.add(new House("MA1101R", "Dilip", 5, 60));
 
         mRecyclerView = findViewById(R.id.recyclerview);
         mRecyclerView.setHasFixedSize(true);
@@ -72,6 +69,7 @@ public class HouseCardview extends AppCompatActivity {
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+
     }
 
     @Override
@@ -95,5 +93,19 @@ public class HouseCardview extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         db = dbH.getWritableDatabase();
+        this.updateRecyclerView();
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private void updateRecyclerView() {
+        houses.clear();
+        Cursor c = db.rawQuery("select * from " + HouseLevelDbHelper.TABLE_NAME, null);
+
+        while(c.moveToNext()){
+            String name = c.getString(1);
+            String desc = c.getString(2);
+            int lvl = c.getInt(3);
+            houses.add(new House(name, desc, lvl, 0));
+        }
     }
 }

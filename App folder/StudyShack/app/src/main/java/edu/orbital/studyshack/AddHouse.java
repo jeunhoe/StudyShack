@@ -31,6 +31,7 @@ public class AddHouse extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+
             }
         });
 
