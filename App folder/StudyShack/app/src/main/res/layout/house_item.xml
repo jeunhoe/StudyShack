@@ -4,27 +4,24 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="4dp"
-    app:cardUseCompatPadding="true">
+    app:cardUseCompatPadding="true"
+    app:cardPreventCornerOverlap="false">
 
-    <android.support.constraint.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:padding="8dp"
-        android:background="#d0d0ce">
+        android:layout_height="wrap_content"
+        android:background="@color/card_background">
 
         <TextView
             android:id="@+id/house_label"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:padding="4dp"
             android:background="@color/cardview_label"
             android:fontFamily="@font/quicksand_bold"
             android:text="CS1010"
             android:textColor="@color/whiteText"
             android:textSize="30dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             />
 
         <TextView
@@ -34,20 +31,16 @@
             android:text="Description:"
             android:textSize="20dp"
             android:fontFamily="@font/quicksand_bold"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/house_label"/>
+            android:layout_below="@id/house_label"
 
         <TextView
             android:id="@+id/description_text"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/house_imageview"
-            app:layout_constraintTop_toBottomOf="@id/description_label"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/description_label"
+            android:text="dummy text"
             android:textSize="16sp"
-            android:text="dummy tsdasdaext"
-            />
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <ImageView
             android:id="@+id/house_imageview"
@@ -58,10 +51,9 @@
             android:layout_marginBottom="8dp"
             android:padding="2dp"
             android:src="@drawable/house2"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"/>
 
-    </android.support.constraint.ConstraintLayout>
+    </RelativeLayout>
 
 </android.support.v7.widget.CardView>
