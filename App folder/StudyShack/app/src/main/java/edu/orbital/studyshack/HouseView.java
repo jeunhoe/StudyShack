@@ -1,5 +1,6 @@
 package edu.orbital.studyshack;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -17,6 +18,9 @@ import java.util.Locale;
 public class HouseView extends AppCompatActivity {
 
     private ImageView upButton;
+    private ImageView upgradeButton;
+    private ImageView houseImage;
+    private TextView houseViewHeader;
 
     private TextView mTextViewCountdown;
     private EditText mEditTextInput;
@@ -32,27 +36,16 @@ public class HouseView extends AppCompatActivity {
     SQLiteDatabase dbspecific;
 
     String housename;
-    String houselevel;
+    int houselevel;
     int housetiming;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        //instantiate both database
-        dbH = new HouseLevelDbHelper(this);
-        db = dbH.getWritableDatabase();
-        dbHspecific = new HouseDbHelper(this);
-        dbspecific = dbHspecific.getWritableDatabase();
-        //pull needed data  from input
-        //housename = getIntent().getStringExtra( key_of_house_name);
-        //houselevel = getIntent().getExtras().getInt(key_of_the_integer);
-
-
-        //query max level
-        //make house object using levledatabase
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_house_view);
+
+        upgradeButton = findViewById(R.id.house_view_upgrade_button);
         upButton = findViewById(R.id.house_view_up_button);
 
         upButton.setOnClickListener(new View.OnClickListener() {
@@ -61,6 +54,29 @@ public class HouseView extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+        //instantiate both database
+
+        dbH = new HouseLevelDbHelper(this);
+        db = dbH.getWritableDatabase();
+        dbHspecific = new HouseDbHelper(this);
+        dbspecific = dbHspecific.getWritableDatabase();
+
+        //pull needed data  from input
+
+        housename = getIntent().getStringExtra("HOUSE_NAME");
+        houselevel = getIntent().getExtras().getInt("HOUSE_LEVEL");
+        housetiming = getTotaltime(dbspecific, housename);
+
+        if (housetiming >= House.timeLimit(houselevel)) {
+            upgradeButton.setVisibility(View.VISIBLE);
+        }
+
+        houseImage = findViewById(R.id.houseview_house);
+        houseImage.setImageResource(House.HOUSE_IMAGES[(houselevel - 1)]);
+
+        houseViewHeader = findViewById(R.id.house_view_header);
+        houseViewHeader.setText(housename);
 
         mEditTextInput = findViewById(R.id.edit_text_input);
         mTextViewCountdown = findViewById(R.id.text_view_countdown);
@@ -104,6 +120,8 @@ public class HouseView extends AppCompatActivity {
                 mTextViewCountdown.setText("00:00");
                 mEditTextInput.setVisibility(View.VISIBLE);
                 mEditTextInput.setText("");
+
+                //specific database add input
                 Toast.makeText(getApplicationContext(), "Congratulations! Good study session :)", Toast.LENGTH_LONG).show();
             }
         }.start();
@@ -131,10 +149,19 @@ public class HouseView extends AppCompatActivity {
         mTextViewCountdown.setText(timeLeftFormatted);
     }
 
-//    private int getTotaltime(SQLiteDatabase db, String name){
-//        Cursor c = db.rawQuery("select input from ")
-//
-//    }
+    private int getTotaltime(SQLiteDatabase db, String name) {
+        String query = "select " + HouseDbHelper.KEY_INPUT + " from " + HouseDbHelper.TABLE_NAME + " where " + HouseDbHelper.KEY_NAME + " = " + "\"" + name + "\"";
+        Cursor c = db.rawQuery(query, null);
+        int result = 0;
+
+        while (c.moveToNext()) {
+            result += c.getInt(0);
+        }
+
+        return result;
+
+    }
+
 
     @Override
     protected void onStart() {
@@ -163,4 +190,25 @@ public class HouseView extends AppCompatActivity {
 
     }
 
+    //change house picture
+    public void upgradeHouse(View view) {
+        Cursor c = db.rawQuery("select * from " + HouseLevelDbHelper.TABLE_NAME + " where " + HouseLevelDbHelper.KEY_NAME + " = ?", new String[]{housename});
+        c.moveToFirst();
+        String name = c.getString(1);
+        String desc = c.getString(2);
+        int lvl = c.getInt(3);
+
+        ContentValues values = new ContentValues();
+        values.put(HouseLevelDbHelper.KEY_NAME, name);
+        values.put(HouseLevelDbHelper.KEY_DESC, desc);
+        values.put(HouseLevelDbHelper.KEY_LEVEL,lvl + 1);
+        db.update(HouseLevelDbHelper.TABLE_NAME, values, "housename = ?", new String[]{housename});
+
+        houselevel = lvl + 1;
+        houseImage.setImageResource(House.HOUSE_IMAGES[(houselevel - 1)]);
+
+        Toast.makeText(getApplicationContext(), "House Upgraded Successfully!", Toast.LENGTH_LONG).show();
+    }
+
 }
+
