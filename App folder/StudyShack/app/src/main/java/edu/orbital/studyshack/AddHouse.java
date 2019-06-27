@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -18,7 +19,6 @@ public class AddHouse extends AppCompatActivity {
     EditText mDescEditText;
     HouseLevelDbHelper dbH;
     SQLiteDatabase db;
-    //SQLiteDatabase dbread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,6 @@ public class AddHouse extends AppCompatActivity {
 
         dbH = new HouseLevelDbHelper(this);
         db = dbH.getWritableDatabase();
-        //dbread = dbH.getReadableDatabase();
 
     }
 
@@ -46,14 +45,20 @@ public class AddHouse extends AppCompatActivity {
         String name = mNameEditText.getText().toString();
         String desc = mDescEditText.getText().toString();
 
-//        String[] columnName = {HouseLevelDbHelper.KEY_NAME};
-////        String[] checkName = {name};
-////        Cursor c = dbread.rawQuery("SELECT * FROM " + HouseLevelDbHelper.TABLE_NAME +  " WHERE " +  HouseLevelDbHelper.KEY_NAME
-////                + " = " + name, null);
-////        if(c.moveToFirst()){
-////            Toast.makeText(getApplicationContext(), "A House with this name already exists.", Toast.LENGTH_LONG).show();
-////            return;
-////        }
+        String[] checkName = {name};
+        Log.d("addhouse", "try to query");
+        Cursor c = db.rawQuery("select * from " + HouseLevelDbHelper.TABLE_NAME + " where " +
+                HouseLevelDbHelper.KEY_NAME + " = ?", checkName);
+
+        Log.d("addhouse", "query successful");
+
+        if(c.moveToFirst()){
+            Toast.makeText(getApplicationContext(), "A House with this name already exists.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        c.close();
+        Log.d("addhouse", "duplicate checked");
 
         if (name.equals("") || desc.equals("")) {
             Toast.makeText(getApplicationContext(), "Please input a valid name/description", Toast.LENGTH_LONG).show();
@@ -78,5 +83,7 @@ public class AddHouse extends AppCompatActivity {
         } else {
             Toast.makeText(getApplicationContext(), "House added!", Toast.LENGTH_LONG).show();
         }
+
+        //db.close();
     }
 }
