@@ -1,6 +1,8 @@
 package edu.orbital.studyshack;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,10 +22,17 @@ public class HouseCardview extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
+    HouseLevelDbHelper dbH;
+    SQLiteDatabase db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_house_cardview);
+
+        dbH = new HouseLevelDbHelper(this);
+        db = dbH.getWritableDatabase();
+
         upButton = findViewById(R.id.house_cardview_up_button);
         addButton = findViewById(R.id.house_cardview_add_button);
         upButton.setOnClickListener(new View.OnClickListener() {
@@ -41,11 +50,20 @@ public class HouseCardview extends AppCompatActivity {
             }
         });
 
+        Cursor c = db.rawQuery("select * from " + HouseLevelDbHelper.TABLE_NAME, null);
         //Lyndon, need u to retrieve database and put all the houses into the linked list
         houses = new LinkedList<>();
-        houses.add(new House("CS2030", "Henry chia got us good", 2, 60));
-        houses.add(new House("CS2040", "old fck", 3, 60));
-        houses.add(new House("MA1101R", "Dilip", 5, 60));
+
+        while(c.moveToNext()){
+            String name = c.getString(1);
+            String desc = c.getString(2);
+            int lvl = c.getInt(3);
+            houses.add(new House(name, desc, lvl, 0));
+        }
+
+//        houses.add(new House("CS2030", "Henry chia got us good", 2, 60));
+//        houses.add(new House("CS2040", "old fck", 3, 60));
+//        houses.add(new House("MA1101R", "Dilip", 5, 60));
 
         mRecyclerView = findViewById(R.id.recyclerview);
         mRecyclerView.setHasFixedSize(true);
@@ -54,5 +72,28 @@ public class HouseCardview extends AppCompatActivity {
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        db = dbH.getWritableDatabase();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        db.close();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        db = dbH.getWritableDatabase();
     }
 }

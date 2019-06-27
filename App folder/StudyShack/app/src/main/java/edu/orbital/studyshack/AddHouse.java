@@ -20,6 +20,7 @@ public class AddHouse extends AppCompatActivity {
     HouseLevelDbHelper dbH;
     SQLiteDatabase db;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +38,7 @@ public class AddHouse extends AppCompatActivity {
         mDescEditText = findViewById(R.id.houseDescriptionEditText);
 
         dbH = new HouseLevelDbHelper(this);
-        db = dbH.getWritableDatabase();
+        db = dbH.getReadableDatabase();
 
     }
 
@@ -52,7 +53,7 @@ public class AddHouse extends AppCompatActivity {
 
         Log.d("addhouse", "query successful");
 
-        if(c.moveToFirst()){
+        if (c.moveToFirst()) {
             Toast.makeText(getApplicationContext(), "A House with this name already exists.", Toast.LENGTH_LONG).show();
             return;
         }
@@ -85,5 +86,28 @@ public class AddHouse extends AppCompatActivity {
         }
 
         //db.close();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        db = dbH.getReadableDatabase();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        db.close();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        db = dbH.getWritableDatabase();
     }
 }

@@ -47,7 +47,7 @@ public class HouseAdapter extends RecyclerView.Adapter<HouseAdapter.HouseViewHol
     @Override
     public void onBindViewHolder(@NonNull HouseViewHolder holder, int position) {
         House currentHouse = mHouseList.get(position);
-        holder.mHouseImageView.setImageResource(HouseAdapter.HOUSE_IMAGES[currentHouse.getLevel()]);
+        holder.mHouseImageView.setImageResource(HouseAdapter.HOUSE_IMAGES[currentHouse.getLevel() - 1]);
         holder.mHouseLabelTextView.setText(currentHouse.getName());
         holder.mDescriptionTextView.setText(currentHouse.getDesc());
     }
