@@ -56,7 +56,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/house_cardview_header"
-        android:scrollbars="vertical"
-        />
+        android:scrollbars="vertical" />
 
 </android.support.constraint.ConstraintLayout>
