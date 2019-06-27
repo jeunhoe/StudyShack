@@ -68,9 +68,10 @@ public class HouseView extends AppCompatActivity {
         houselevel = getIntent().getExtras().getInt("HOUSE_LEVEL");
         housetiming = getTotaltime(dbspecific, housename);
 
-        if (housetiming >= House.timeLimit(houselevel)) {
-            upgradeButton.setVisibility(View.VISIBLE);
-        }
+        checkUpgrade();
+//        if (housetiming >= House.timeLimit(houselevel)) {
+//            upgradeButton.setVisibility(View.VISIBLE);
+//        }
 
         houseImage = findViewById(R.id.houseview_house);
         houseImage.setImageResource(House.HOUSE_IMAGES[(houselevel - 1)]);
@@ -201,13 +202,25 @@ public class HouseView extends AppCompatActivity {
         ContentValues values = new ContentValues();
         values.put(HouseLevelDbHelper.KEY_NAME, name);
         values.put(HouseLevelDbHelper.KEY_DESC, desc);
-        values.put(HouseLevelDbHelper.KEY_LEVEL,lvl + 1);
+        values.put(HouseLevelDbHelper.KEY_LEVEL, lvl + 1);
         db.update(HouseLevelDbHelper.TABLE_NAME, values, "housename = ?", new String[]{housename});
 
         houselevel = lvl + 1;
         houseImage.setImageResource(House.HOUSE_IMAGES[(houselevel - 1)]);
 
         Toast.makeText(getApplicationContext(), "House Upgraded Successfully!", Toast.LENGTH_LONG).show();
+
+        checkUpgrade();
+    }
+
+    public void checkUpgrade() {
+        if (houselevel == 5) {
+            upgradeButton.setVisibility(View.INVISIBLE);
+        } else if (housetiming >= House.timeLimit(houselevel)) {
+            upgradeButton.setVisibility(View.VISIBLE);
+        } else {
+            upgradeButton.setVisibility((View.INVISIBLE));
+        }
     }
 
 }
