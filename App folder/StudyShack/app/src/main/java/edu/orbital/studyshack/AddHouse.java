@@ -68,7 +68,7 @@ public class AddHouse extends AppCompatActivity {
         } else if (name.length() > 20) {
             Toast.makeText(getApplicationContext(), "Please shorten name to max 20 characters", Toast.LENGTH_LONG).show();
             return;
-        } else if (desc.length() > 50) {
+        } else if (desc.length() > 100) {
             Toast.makeText(getApplicationContext(), "Please shorten description to max 50 characters", Toast.LENGTH_LONG).show();
             return;
         }

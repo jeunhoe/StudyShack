@@ -1,5 +1,7 @@
 package edu.orbital.studyshack;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
@@ -24,11 +26,28 @@ public class HouseView extends AppCompatActivity {
     private long mStartTimeInMillis;
     private long mTimeLeftInMillis;
 
+    HouseLevelDbHelper dbH;
+    SQLiteDatabase db;
+    HouseDbHelper dbHspecific;
+    SQLiteDatabase dbspecific;
+
+    String housename;
+    String houselevel;
+    int housetiming;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         //instantiate both database
-        //pull needed data  from inpu
+        dbH = new HouseLevelDbHelper(this);
+        db = dbH.getWritableDatabase();
+        dbHspecific = new HouseDbHelper(this);
+        dbspecific = dbHspecific.getWritableDatabase();
+        //pull needed data  from input
+        //housename = getIntent().getStringExtra( key_of_house_name);
+        //houselevel = getIntent().getExtras().getInt(key_of_the_integer);
+
+
         //query max level
         //make house object using levledatabase
 
@@ -110,6 +129,38 @@ public class HouseView extends AppCompatActivity {
 
         String timeLeftFormatted = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
         mTextViewCountdown.setText(timeLeftFormatted);
+    }
+
+//    private int getTotaltime(SQLiteDatabase db, String name){
+//        Cursor c = db.rawQuery("select input from ")
+//
+//    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        db = dbH.getWritableDatabase();
+        dbspecific = dbHspecific.getWritableDatabase();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        db.close();
+        dbHspecific.close();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        db = dbH.getWritableDatabase();
+        dbspecific = dbHspecific.getWritableDatabase();
+
     }
 
 }
