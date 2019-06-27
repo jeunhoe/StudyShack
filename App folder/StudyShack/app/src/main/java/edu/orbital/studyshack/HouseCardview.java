@@ -3,16 +3,22 @@ package edu.orbital.studyshack;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
 import java.util.LinkedList;
-import java.util.List;
 
 public class HouseCardview extends AppCompatActivity {
 
     private ImageView upButton;
     private ImageView addButton;
+    private LinkedList<House> houses;
+
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,5 +40,19 @@ public class HouseCardview extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        //Lyndon, need u to retrieve database and put all the houses into the linked list
+        houses = new LinkedList<>();
+        houses.add(new House("CS2030", "Henry chia got us good", 2, 60));
+        houses.add(new House("CS2040", "old fck", 3, 60));
+        houses.add(new House("MA1101R", "Dilip", 5, 60));
+
+        mRecyclerView = findViewById(R.id.recyclerview);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(this);
+        mAdapter = new HouseAdapter(houses);
+
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
     }
 }

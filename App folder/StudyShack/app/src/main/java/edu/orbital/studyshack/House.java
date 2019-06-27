@@ -1,6 +1,7 @@
 package edu.orbital.studyshack;
 
 public class House {
+
     private String name;
     private String desc;
     private int level;
@@ -12,10 +13,10 @@ public class House {
     public static final int lvl5time = 300;
 
     public House(String name, String desc, int level, int totaltime) {
-        name = name;
-        desc = desc;
-        level = level;
-        totaltime = totaltime;
+        this.name = name;
+        this.desc = desc;
+        this.level = level;
+        this.totaltime = totaltime;
     }
 
     public String getName() {
