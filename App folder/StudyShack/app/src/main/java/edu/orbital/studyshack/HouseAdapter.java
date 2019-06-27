@@ -1,5 +1,6 @@
 package edu.orbital.studyshack;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,6 +17,16 @@ public class HouseAdapter extends RecyclerView.Adapter<HouseAdapter.HouseViewHol
 
     public LinkedList<House> mHouseList;
 
+    private OnItemClickListener mListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener (OnItemClickListener listener) {
+        mListener = listener;
+    }
+
     public static class HouseViewHolder extends RecyclerView.ViewHolder {
 
         public TextView mHouseLabelTextView;
@@ -23,12 +34,26 @@ public class HouseAdapter extends RecyclerView.Adapter<HouseAdapter.HouseViewHol
         public TextView mDescriptionTextView;
         public ImageView mHouseImageView;
 
-        public HouseViewHolder(@NonNull View itemView) {
+        public HouseViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
             mHouseLabelTextView = itemView.findViewById(R.id.house_label);
             mDescriptionLabelTextView = itemView.findViewById(R.id.description_label);
             mDescriptionTextView = itemView.findViewById(R.id.description_text);
             mHouseImageView = itemView.findViewById(R.id.house_imageview);
+
+            //Card's on click method
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        // extra code
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -40,7 +65,7 @@ public class HouseAdapter extends RecyclerView.Adapter<HouseAdapter.HouseViewHol
     @Override
     public HouseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int view) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.house_item, parent, false);
-        HouseViewHolder hvh = new HouseViewHolder(v);
+        HouseViewHolder hvh = new HouseViewHolder(v, mListener);
         return hvh;
     }
 

@@ -19,7 +19,7 @@ public class HouseCardview extends AppCompatActivity {
     private LinkedList<House> houses;
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private HouseAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     HouseLevelDbHelper dbH;
@@ -69,6 +69,16 @@ public class HouseCardview extends AppCompatActivity {
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener(new HouseAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                House toPass = houses.get(position);
+                Intent intent = new Intent(getApplicationContext(), HouseView.class);
+                intent.putExtra("HOUSE_NAME", toPass.getName());
+                intent.putExtra("HOUSE_LEVEL", toPass.getLevel());
+                startActivity(intent);
+            }
+        });
 
     }
 
