@@ -7,4 +7,12 @@
     <string name="start_button_label">Start</string>
     <string name="upgrade_button_description">Click to upgrade house</string>
     <string name="houseview_description">Image of current house</string>
+    <string name="default_time">00:00</string>
+    <string name="add_house_label">Add House</string>
+    <string name="house_description_label">House Description:</string>
+    <string name="house_name_label">House Name:</string>
+    <string name="house_name_hint">Fill in your house name</string>
+    <string name="add_button_label">Add</string>
+    <string name="house_description_hint">Fill in your house description</string>
+    <string name="settings_button_description">Click to edit current house</string>
 </resources>

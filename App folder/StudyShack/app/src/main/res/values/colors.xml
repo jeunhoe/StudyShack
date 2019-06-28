@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="whiteText">#F7F9E4</color>
+    <color name="whiteTextHint">#4AF7F9E4</color>
     <color name="cardview_label">#1fb085</color>
     <color name="card_background">#d0d0ce</color>
 </resources>
