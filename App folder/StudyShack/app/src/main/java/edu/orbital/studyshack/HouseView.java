@@ -39,6 +39,7 @@ public class HouseView extends AppCompatActivity {
     SQLiteDatabase dbspecific;
 
     String housename;
+    String housedesc;
     int houselevel;
     int housetiming;
 
@@ -92,6 +93,7 @@ public class HouseView extends AppCompatActivity {
 
         //pull needed data to set house image
         housename = getIntent().getStringExtra("HOUSE_NAME");
+        housedesc = getIntent().getStringExtra("HOUSE_DESC");
         houselevel = getIntent().getExtras().getInt("HOUSE_LEVEL");
         housetiming = getTotaltime(dbspecific, housename);
         checkUpgrade();
@@ -162,6 +164,10 @@ public class HouseView extends AppCompatActivity {
                 input.put(HouseDbHelper.KEY_YEAR, currentYear);
                 input.put(HouseDbHelper.KEY_HOUR, currentHour);
                 input.put(HouseDbHelper.KEY_MINS, currentMinute);
+                input.put(HouseDbHelper.KEY_NAME, housename);
+                long timeInputlong = mStartTimeInMillis/ (60*1000);
+                int timeInput = (int) (long) timeInputlong;
+                input.put(HouseDbHelper.KEY_INPUT, timeInput);
                 long row = dbspecific.insert(HouseDbHelper.TABLE_NAME, null, input);
 
                 if(row == -1) {
@@ -169,6 +175,9 @@ public class HouseView extends AppCompatActivity {
                 } else {
                     Toast.makeText(getApplicationContext(), "Congratulations! Good study session :)", Toast.LENGTH_LONG).show();
                 }
+
+                //update the timeLeft and upgradebutton visibility
+
             }
         }.start();
 
