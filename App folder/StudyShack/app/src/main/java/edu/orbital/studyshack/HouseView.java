@@ -1,11 +1,13 @@
 package edu.orbital.studyshack;
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -126,8 +128,21 @@ public class HouseView extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (mTimerRunning) {
-                    stopTimer();
-                    mEditTextInput.setVisibility(View.VISIBLE);
+                    AlertDialog.Builder alert = new AlertDialog.Builder(HouseView.this);
+                    alert.setTitle("Confirmation");
+                    alert.setMessage("Are you sure you want to stop the timer? All progress will be lost!");
+                    alert.setNegativeButton("NO", null);
+                    alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (mTimerRunning) {
+                                stopTimer();
+                            } else {
+                                return;
+                            }
+                        }
+                    });
+                    alert.show();
                 } else {
                     String timeString = mEditTextInput.getText().toString();
                     if (timeString.isEmpty()) {
