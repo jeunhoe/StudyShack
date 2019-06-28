@@ -76,6 +76,7 @@ public class HouseCardview extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), HouseView.class);
                 intent.putExtra("HOUSE_NAME", toPass.getName());
                 intent.putExtra("HOUSE_LEVEL", toPass.getLevel());
+                intent.putExtra("HOUSE_DESC", toPass.getDesc());
                 //Intent intent = new Intent(getApplicationContext(), Statistics.class);
                 startActivity(intent);
             }

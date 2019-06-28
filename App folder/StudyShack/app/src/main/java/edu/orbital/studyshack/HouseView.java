@@ -1,6 +1,7 @@
 package edu.orbital.studyshack;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -81,7 +82,10 @@ public class HouseView extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                return; // fill in later
+                Intent intent = new Intent(getApplicationContext(), HouseSettings.class);
+                intent.putExtra("HOUSE_NAME", housename);
+                intent.putExtra("HOUSE_DESC", housedesc);
+                startActivity(intent);
             }
         });
 
