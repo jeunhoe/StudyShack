@@ -9,26 +9,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".HouseSettings"></activity>
         <activity
             android:name=".AddHouse"
             android:parentActivityName=".HouseCardview"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".HouseView"
             android:parentActivityName=".HouseCardview"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".Statistics"
             android:parentActivityName=".HouseCardview"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait" />
         <activity
             android:name=".HouseCardview"
             android:parentActivityName=".Homepage"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".Homepage"
             android:screenOrientation="portrait">
