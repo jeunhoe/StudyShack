@@ -19,8 +19,9 @@ public class HouseView extends AppCompatActivity {
 
     private ImageView upButton;
     private ImageView upgradeButton;
-    private ImageView houseImage;
     private TextView houseViewHeader;
+    private ImageView houseImage;
+    private TextView timeToUpgradeTextView;
 
     private TextView mTextViewCountdown;
     private EditText mEditTextInput;
@@ -45,8 +46,17 @@ public class HouseView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_house_view);
 
-        upgradeButton = findViewById(R.id.house_view_upgrade_button);
+        // Tie layout files to java code
+
         upButton = findViewById(R.id.house_view_up_button);
+        upgradeButton = findViewById(R.id.house_view_upgrade_button);
+        houseViewHeader = findViewById(R.id.house_view_header);
+        houseImage = findViewById(R.id.houseview_house);
+        timeToUpgradeTextView = findViewById(R.id.time_to_upgrade_textview);
+
+        mEditTextInput = findViewById(R.id.edit_text_input);
+        mTextViewCountdown = findViewById(R.id.text_view_countdown);
+        mButtonStartStop = findViewById(R.id.button_start_stop);
 
         upButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,16 +83,9 @@ public class HouseView extends AppCompatActivity {
 //            upgradeButton.setVisibility(View.VISIBLE);
 //        }
 
-        houseImage = findViewById(R.id.houseview_house);
         houseImage.setImageResource(House.HOUSE_IMAGES[(houselevel - 1)]);
-
-        houseViewHeader = findViewById(R.id.house_view_header);
         houseViewHeader.setText(housename);
 
-        mEditTextInput = findViewById(R.id.edit_text_input);
-        mTextViewCountdown = findViewById(R.id.text_view_countdown);
-
-        mButtonStartStop = findViewById(R.id.button_start_stop);
         mButtonStartStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

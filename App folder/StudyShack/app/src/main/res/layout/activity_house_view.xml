@@ -7,12 +7,28 @@
     tools:context=".HouseView"
     android:background="@drawable/background">
 
+    <TextView
+        android:id="@+id/time_to_upgrade_label"
+        android:layout_width="0dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/quicksand_bold"
+        android:text="@string/time_to_upgrade_textview"
+        android:textAlignment="viewStart"
+        android:textColor="@color/whiteText"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/button_start_stop"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_countdown" />
+
     <ImageView
         android:id="@+id/house_view_up_button"
         android:layout_width="54dp"
         android:layout_height="57dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
+        android:contentDescription="@string/up_button_description"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/back_button" />
@@ -25,10 +41,9 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/quicksand_bold"
-        android:text="House Name Placeholder"
         android:textAlignment="center"
         android:textColor="@color/whiteText"
-        android:textSize="35sp"
+        android:textSize="42sp"
         android:textStyle="bold"
         android:typeface="normal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -56,7 +71,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="00:00"
         android:textAlignment="center"
         android:textColor="@color/whiteText"
         android:textSize="60sp"
@@ -71,7 +85,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="32dp"
-        android:text="Start"
+        android:text="@string/start_button_label"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -83,12 +97,13 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:contentDescription="@string/upgrade_button_description"
+        android:onClick="upgradeHouse"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/house_view_header"
-        app:srcCompat="@drawable/upgrade_button"
-        android:onClick="upgradeHouse"
-        android:visibility="invisible"/>
+        app:srcCompat="@drawable/upgrade_button" />
 
     <ImageView
         android:id="@+id/houseview_house"
@@ -97,9 +112,22 @@
         android:layout_marginStart="60dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="60dp"
+        android:contentDescription="@string/houseview_description"
         app:layout_constraintBottom_toTopOf="@+id/edit_text_input"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/house_view_upgrade_button" />
+
+    <TextView
+        android:id="@+id/time_to_upgrade_textview"
+        android:layout_width="121dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/quicksand_bold"
+        android:textAlignment="center"
+        android:textColor="@color/whiteText"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/time_to_upgrade_label" />
 
 </android.support.constraint.ConstraintLayout>

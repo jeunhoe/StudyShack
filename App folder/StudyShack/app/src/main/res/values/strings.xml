@@ -2,4 +2,9 @@
     <string name="app_name">StudyShack</string>
     <string name="statistics_label">Statistics</string>
     <string name="houses_label">Houses</string>
+    <string name="up_button_description">Go back to previous page</string>
+    <string name="time_to_upgrade_textview">Time left till next upgrade:</string>
+    <string name="start_button_label">Start</string>
+    <string name="upgrade_button_description">Click to upgrade house</string>
+    <string name="houseview_description">Image of current house</string>
 </resources>
