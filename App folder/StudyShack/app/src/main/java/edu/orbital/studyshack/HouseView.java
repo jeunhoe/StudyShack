@@ -20,6 +20,7 @@ public class HouseView extends AppCompatActivity {
 
     private ImageView upButton;
     private ImageView upgradeButton;
+    private ImageView settingsButton;
     private TextView houseViewHeader;
     private ImageView houseImage;
     private TextView timeToUpgradeTextView;
@@ -59,6 +60,7 @@ public class HouseView extends AppCompatActivity {
 
         upButton = findViewById(R.id.house_view_up_button);
         upgradeButton = findViewById(R.id.house_view_upgrade_button);
+        settingsButton = findViewById(R.id.house_view_settings_button);
         houseViewHeader = findViewById(R.id.house_view_header);
         houseImage = findViewById(R.id.houseview_house);
         timeToUpgradeTextView = findViewById(R.id.time_to_upgrade_textview);
@@ -71,6 +73,14 @@ public class HouseView extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+            }
+        });
+
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                return; // fill in later
             }
         });
 

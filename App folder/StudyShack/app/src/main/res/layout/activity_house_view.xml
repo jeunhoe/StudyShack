@@ -34,7 +34,7 @@
         app:srcCompat="@drawable/settings_button" />
 
     <ImageView
-        android:id="@+id/house_view_up_button2"
+        android:id="@+id/house_view_up_button"
         android:layout_width="54dp"
         android:layout_height="57dp"
         android:layout_marginStart="12dp"
