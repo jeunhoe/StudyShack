@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -95,18 +96,30 @@ public class HouseView extends AppCompatActivity {
         dbHspecific = new HouseDbHelper(this);
         dbspecific = dbHspecific.getWritableDatabase();
 
-        //pull needed data to set house image
+        //getting extras from the intent
         housename = getIntent().getStringExtra("HOUSE_NAME");
         housedesc = getIntent().getStringExtra("HOUSE_DESC");
         houselevel = getIntent().getExtras().getInt("HOUSE_LEVEL");
+
+        //setting upgrade button visibility
         housetiming = getTotaltime(dbspecific, housename);
         checkUpgrade();
+
+        //setting house image
         houseImage.setImageResource(House.HOUSE_IMAGES[(houselevel - 1)]);
         houseViewHeader.setText(housename);
 
         //pull needed data to set the time left to upgrade
-        int timeLeft = House.timeLimit(houselevel) - checkInputTiming(dbspecific);
-        timeToUpgradeTextView.setText(timeLeft + " mins");
+        if (houselevel == 5) {
+            timeToUpgradeTextView.setText("Highest Level Reached!");
+        } else {
+            int timeLeft = House.timeLimit(houselevel) - checkInputTiming(dbspecific);
+            if (timeLeft > 0) {
+                timeToUpgradeTextView.setText(timeLeft + " mins");
+            } else {
+                timeToUpgradeTextView.setText("0 mins");
+            }
+        }
 
 
         mButtonStartStop.setOnClickListener(new View.OnClickListener() {
@@ -169,18 +182,31 @@ public class HouseView extends AppCompatActivity {
                 input.put(HouseDbHelper.KEY_HOUR, currentHour);
                 input.put(HouseDbHelper.KEY_MINS, currentMinute);
                 input.put(HouseDbHelper.KEY_NAME, housename);
-                long timeInputlong = mStartTimeInMillis/ (60*1000);
+                long timeInputlong = mStartTimeInMillis / (60 * 1000);
                 int timeInput = (int) (long) timeInputlong;
                 input.put(HouseDbHelper.KEY_INPUT, timeInput);
                 long row = dbspecific.insert(HouseDbHelper.TABLE_NAME, null, input);
 
-                if(row == -1) {
+                if (row == -1) {
                     Toast.makeText(getApplicationContext(), "Sorry, an error occurred and your study session was not recorded :(", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(getApplicationContext(), "Congratulations! Good study session :)", Toast.LENGTH_LONG).show();
                 }
 
                 //update the timeLeft and upgradebutton visibility
+                if (houselevel == 5) {
+                    Log.d("HouseView", "House is already max level");
+                } else {
+                    housetiming = getTotaltime(dbspecific, housename);
+                    checkUpgrade();
+
+                    int timeLeft = House.timeLimit(houselevel) - checkInputTiming(dbspecific);
+                    if (timeLeft > 0) {
+                        timeToUpgradeTextView.setText(timeLeft + " mins");
+                    } else {
+                        timeToUpgradeTextView.setText("0 mins");
+                    }
+                }
 
             }
         }.start();
@@ -264,16 +290,29 @@ public class HouseView extends AppCompatActivity {
         values.put(HouseLevelDbHelper.KEY_LEVEL, lvl + 1);
         db.update(HouseLevelDbHelper.TABLE_NAME, values, "housename = ?", new String[]{housename});
 
-            houselevel = lvl + 1;
-            houseImage.setImageResource(House.HOUSE_IMAGES[(houselevel - 1)]);
+        houselevel = lvl + 1;
+        houseImage.setImageResource(House.HOUSE_IMAGES[(houselevel - 1)]);
 
-            Toast.makeText(getApplicationContext(), "House Upgraded Successfully!", Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "House Upgraded Successfully!", Toast.LENGTH_LONG).show();
 
+        if (houselevel == 5) {
+            Log.d("HouseView", "House is already max level");
+            timeToUpgradeTextView.setText("Max Level Reached!");
+        } else {
+            housetiming = getTotaltime(dbspecific, housename);
             checkUpgrade();
-        }
 
-        public void checkUpgrade() {
-            if (houselevel == 5) {
+            int timeLeft = House.timeLimit(houselevel) - checkInputTiming(dbspecific);
+            if (timeLeft > 0) {
+                timeToUpgradeTextView.setText(timeLeft + " mins");
+            } else {
+                timeToUpgradeTextView.setText("0 mins");
+            }
+        }
+    }
+
+    public void checkUpgrade() {
+        if (houselevel == 5) {
             upgradeButton.setVisibility(View.INVISIBLE);
         } else if (housetiming >= House.timeLimit(houselevel)) {
             upgradeButton.setVisibility(View.VISIBLE);
@@ -289,7 +328,7 @@ public class HouseView extends AppCompatActivity {
                 " where " + HouseDbHelper.KEY_NAME + " = ?";
         Cursor c = db.rawQuery(query, new String[]{housename});
 
-        while(c.moveToNext()){
+        while (c.moveToNext()) {
             result += c.getInt(0);
         }
 

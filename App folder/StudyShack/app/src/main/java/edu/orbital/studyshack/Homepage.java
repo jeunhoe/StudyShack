@@ -14,10 +14,19 @@ public class Homepage extends AppCompatActivity {
     HouseDbHelper dbHspecific;
     SQLiteDatabase dbspecific;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
+
+//        dbH = new HouseLevelDbHelper(this);
+//        db = dbH.getWritableDatabase();
+//        dbHspecific = new HouseDbHelper(this);
+//        dbspecific = dbHspecific.getWritableDatabase();
+//
+//        this.deleteDatabase(HouseLevelDbHelper.TABLE_NAME);
+//        this.deleteDatabase(HouseDbHelper.TABLE_NAME);
     }
 
     public void openStatistics(View view) {
