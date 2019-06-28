@@ -99,6 +99,8 @@ public class HouseView extends AppCompatActivity {
         houseViewHeader.setText(housename);
 
         //pull needed data to set the time left to upgrade
+        int timeLeft = House.timeLimit(houselevel) - checkInputTiming(dbspecific);
+        timeToUpgradeTextView.setText(timeLeft + " mins");
 
 
         mButtonStartStop.setOnClickListener(new View.OnClickListener() {
@@ -193,6 +195,7 @@ public class HouseView extends AppCompatActivity {
         mTextViewCountdown.setText(timeLeftFormatted);
     }
 
+
     private int getTotaltime(SQLiteDatabase db, String name) {
         String query = "select " + HouseDbHelper.KEY_INPUT + " from " + HouseDbHelper.TABLE_NAME + " where " + HouseDbHelper.KEY_NAME + " = " + "\"" + name + "\"";
         Cursor c = db.rawQuery(query, null);
@@ -248,16 +251,16 @@ public class HouseView extends AppCompatActivity {
         values.put(HouseLevelDbHelper.KEY_LEVEL, lvl + 1);
         db.update(HouseLevelDbHelper.TABLE_NAME, values, "housename = ?", new String[]{housename});
 
-        houselevel = lvl + 1;
-        houseImage.setImageResource(House.HOUSE_IMAGES[(houselevel - 1)]);
+            houselevel = lvl + 1;
+            houseImage.setImageResource(House.HOUSE_IMAGES[(houselevel - 1)]);
 
-        Toast.makeText(getApplicationContext(), "House Upgraded Successfully!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "House Upgraded Successfully!", Toast.LENGTH_LONG).show();
 
-        checkUpgrade();
-    }
+            checkUpgrade();
+        }
 
-    public void checkUpgrade() {
-        if (houselevel == 5) {
+        public void checkUpgrade() {
+            if (houselevel == 5) {
             upgradeButton.setVisibility(View.INVISIBLE);
         } else if (housetiming >= House.timeLimit(houselevel)) {
             upgradeButton.setVisibility(View.VISIBLE);

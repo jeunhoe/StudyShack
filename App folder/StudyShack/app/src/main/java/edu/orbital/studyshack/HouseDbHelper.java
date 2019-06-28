@@ -1,8 +1,8 @@
 package edu.orbital.studyshack;
 
-        import android.content.Context;
-        import android.database.sqlite.SQLiteDatabase;
-        import android.database.sqlite.SQLiteOpenHelper;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
 public class HouseDbHelper extends SQLiteOpenHelper {
     public static final String TABLE_NAME = "HouseInputs";
@@ -25,7 +25,7 @@ public class HouseDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String cmd = "create table " + TABLE_NAME + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_DAY + " INTEGER," +
                 KEY_DATE + " INTEGER," + KEY_MONTH + " INTEGER," + KEY_YEAR + " INTEGER," +
-                KEY_HOUR+ " INTEGER," + KEY_MINS + " INTEGER," + KEY_NAME + " TEXT,"
+                KEY_HOUR + " INTEGER," + KEY_MINS + " INTEGER," + KEY_NAME + " TEXT,"
                 + KEY_INPUT + " INTEGER)";
         db.execSQL(cmd);
     }
