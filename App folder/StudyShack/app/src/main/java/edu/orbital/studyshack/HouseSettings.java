@@ -1,5 +1,6 @@
 package edu.orbital.studyshack;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -51,13 +52,35 @@ public class HouseSettings extends AppCompatActivity {
                     // Specific database
 
                     // Dialog pop up
-                    AlertDialog.Builder alert = new AlertDialog.Builder(getApplicationContext());
+                    AlertDialog.Builder alert = new AlertDialog.Builder(HouseSettings.this);
                     alert.setTitle("Success");
                     alert.setMessage("House successfully changed!");
                     alert.setNeutralButton("OK", null);
+                    alert.setIcon(R.drawable.studyshacklogo);
                     alert.show();
                 }
+            }
+        });
 
+        mDeleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(HouseSettings.this);
+                alert.setTitle("Delete house");
+                alert.setMessage("Are you sure you want to delete your house? You will lose all records of your study sessions!");
+                alert.setNegativeButton("NO", null);
+                alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Delete from database
+
+                        // Navigate back to cardview
+                        Intent intent = new Intent(getApplicationContext(), HouseCardview.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+                alert.show();
             }
         });
 

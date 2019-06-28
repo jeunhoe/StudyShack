@@ -16,6 +16,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".HouseView"
+            android:noHistory="true"
             android:parentActivityName=".HouseCardview"
             android:screenOrientation="portrait" />
         <activity
