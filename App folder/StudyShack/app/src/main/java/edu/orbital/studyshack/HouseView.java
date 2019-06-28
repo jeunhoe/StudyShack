@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Calendar;
 import java.util.Locale;
 
 public class HouseView extends AppCompatActivity {
@@ -40,6 +41,14 @@ public class HouseView extends AppCompatActivity {
     int houselevel;
     int housetiming;
 
+    int currentDay;
+    int currentDate;
+    int currentMonth;
+    int currentYear;
+    int currentHour;
+    int currentMinute;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -66,25 +75,21 @@ public class HouseView extends AppCompatActivity {
         });
 
         //instantiate both database
-
         dbH = new HouseLevelDbHelper(this);
         db = dbH.getWritableDatabase();
         dbHspecific = new HouseDbHelper(this);
         dbspecific = dbHspecific.getWritableDatabase();
 
-        //pull needed data  from input
-
+        //pull needed data to set house image
         housename = getIntent().getStringExtra("HOUSE_NAME");
         houselevel = getIntent().getExtras().getInt("HOUSE_LEVEL");
         housetiming = getTotaltime(dbspecific, housename);
-
         checkUpgrade();
-//        if (housetiming >= House.timeLimit(houselevel)) {
-//            upgradeButton.setVisibility(View.VISIBLE);
-//        }
-
         houseImage.setImageResource(House.HOUSE_IMAGES[(houselevel - 1)]);
         houseViewHeader.setText(housename);
+
+        //pull needed data to set the time left to upgrade
+
 
         mButtonStartStop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,6 +115,18 @@ public class HouseView extends AppCompatActivity {
     }
 
     public void startTimer() {
+
+        long millis = System.currentTimeMillis();
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(millis);
+        currentDay = cal.get(Calendar.DAY_OF_WEEK);
+        currentDate = cal.get(Calendar.DAY_OF_MONTH);
+        currentMonth = cal.get(Calendar.MONTH);
+        currentYear = cal.get(Calendar.YEAR);
+        currentHour = cal.get(Calendar.HOUR_OF_DAY);
+        currentMinute = cal.get(Calendar.MINUTE);
+
+
         mCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -126,7 +143,20 @@ public class HouseView extends AppCompatActivity {
                 mEditTextInput.setText("");
 
                 //specific database add input
-                Toast.makeText(getApplicationContext(), "Congratulations! Good study session :)", Toast.LENGTH_LONG).show();
+                ContentValues input = new ContentValues();
+                input.put(HouseDbHelper.KEY_DAY, currentDay);
+                input.put(HouseDbHelper.KEY_DATE, currentDate);
+                input.put(HouseDbHelper.KEY_MONTH, currentMonth);
+                input.put(HouseDbHelper.KEY_YEAR, currentYear);
+                input.put(HouseDbHelper.KEY_HOUR, currentHour);
+                input.put(HouseDbHelper.KEY_MINS, currentMinute);
+                long row = dbspecific.insert(HouseDbHelper.TABLE_NAME, null, input);
+
+                if(row == -1) {
+                    Toast.makeText(getApplicationContext(), "Sorry, an error occurred and your study session was not recorded :(", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Congratulations! Good study session :)", Toast.LENGTH_LONG).show();
+                }
             }
         }.start();
 
@@ -224,6 +254,20 @@ public class HouseView extends AppCompatActivity {
         } else {
             upgradeButton.setVisibility((View.INVISIBLE));
         }
+    }
+
+    public int checkInputTiming(SQLiteDatabase db) {
+        int result = 0;
+
+        String query = "select " + HouseDbHelper.KEY_INPUT + " from " + HouseDbHelper.TABLE_NAME +
+                " where " + HouseDbHelper.KEY_NAME + " = ?";
+        Cursor c = db.rawQuery(query, new String[]{housename});
+
+        while(c.moveToNext()){
+            result += c.getInt(0);
+        }
+
+        return result;
     }
 
 }
