@@ -14,4 +14,5 @@
     <string name="house_name_hint">Fill in your house name</string>
     <string name="add_button_label">Add</string>
     <string name="house_description_hint">Fill in your house description</string>
+    <string name="settings_button_description">Click to edit current house</string>
 </resources>
