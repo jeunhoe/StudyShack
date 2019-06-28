@@ -157,6 +157,8 @@ public class HouseView extends AppCompatActivity {
         currentHour = cal.get(Calendar.HOUR_OF_DAY);
         currentMinute = cal.get(Calendar.MINUTE);
 
+        upgradeButton.setVisibility(View.INVISIBLE);
+
 
         mCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 1000) {
             @Override
@@ -224,6 +226,8 @@ public class HouseView extends AppCompatActivity {
         mTextViewCountdown.setText("00:00");
         mEditTextInput.setVisibility(View.VISIBLE);
         mEditTextInput.setText("");
+
+        checkUpgrade();
     }
 
     public void updateCountDownText() {
