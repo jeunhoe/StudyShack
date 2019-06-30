@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.media.Image;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -102,7 +101,6 @@ public class HouseSettings extends AppCompatActivity {
 
                     }
 
-
                     // Dialog pop up
                     AlertDialog.Builder alert = new AlertDialog.Builder(HouseSettings.this);
                     alert.setTitle("Success");
@@ -147,7 +145,6 @@ public class HouseSettings extends AppCompatActivity {
                 alert.show();
             }
         });
-
     }
 
     @Override

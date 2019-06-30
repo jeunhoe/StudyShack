@@ -26,6 +26,13 @@ public class HouseCardview extends AppCompatActivity {
     SQLiteDatabase db;
 
     @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), Homepage.class);
+        intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivity(intent);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_house_cardview);
@@ -83,6 +90,8 @@ public class HouseCardview extends AppCompatActivity {
         });
 
     }
+
+
 
     @Override
     protected void onStart() {
