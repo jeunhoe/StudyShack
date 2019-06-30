@@ -108,7 +108,10 @@ public class HouseSettings extends AppCompatActivity {
                     alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            onBackPressed();
+                            Intent intent = new Intent(getApplicationContext(), HouseCardview.class);
+                            startActivity(intent);
+                            finish();
+
                         }
                     });
                     alert.setIcon(R.drawable.studyshacklogo);
