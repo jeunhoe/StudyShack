@@ -5,15 +5,18 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.Image;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 public class HouseSettings extends AppCompatActivity {
 
+    ImageView mUpButton;
     EditText mHouseNameEditText;
     EditText mHouseDescEditText;
     Button mEditButton;
@@ -37,10 +40,18 @@ public class HouseSettings extends AppCompatActivity {
         dbHspecific = new HouseDbHelper(this);
         dbspecific = dbHspecific.getWritableDatabase();
 
+        mUpButton = findViewById(R.id.house_settings_up_button);
         mHouseNameEditText = findViewById(R.id.house_settings_name_edit_text);
         mHouseDescEditText = findViewById(R.id.house_settings_description_edit_text);
         mEditButton = findViewById(R.id.house_settings_edit_button);
         mDeleteButton = findViewById(R.id.house_settings_delete_button);
+
+        mUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         Intent intent = getIntent();
         origHouseName = intent.getStringExtra("HOUSE_NAME");
