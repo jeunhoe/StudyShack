@@ -33,6 +33,10 @@ public class HouseAdapter extends RecyclerView.Adapter<HouseAdapter.HouseViewHol
         public TextView mDescriptionLabelTextView;
         public TextView mDescriptionTextView;
         public ImageView mHouseImageView;
+        public TextView mTimeSpentThisWeekLabelTextView;
+        public TextView mTimeSpentThisWeekTextTextView;
+        public TextView mTimeToUpgradeLabelTextView;
+        public TextView mTimeToUpgradeTextTextView;
 
         public HouseViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
@@ -40,6 +44,10 @@ public class HouseAdapter extends RecyclerView.Adapter<HouseAdapter.HouseViewHol
             mDescriptionLabelTextView = itemView.findViewById(R.id.description_label);
             mDescriptionTextView = itemView.findViewById(R.id.description_text);
             mHouseImageView = itemView.findViewById(R.id.house_imageview);
+            mTimeSpentThisWeekLabelTextView = itemView.findViewById(R.id.time_spent_this_week_label);
+            mTimeSpentThisWeekTextTextView = itemView.findViewById(R.id.time_spent_this_week_text);
+            mTimeToUpgradeLabelTextView = itemView.findViewById(R.id.time_to_upgrade_label);
+            mTimeToUpgradeTextTextView = itemView.findViewById(R.id.time_to_upgrade_text);
 
             //Card's on click method
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +83,28 @@ public class HouseAdapter extends RecyclerView.Adapter<HouseAdapter.HouseViewHol
         holder.mHouseImageView.setImageResource(HouseAdapter.HOUSE_IMAGES[currentHouse.getLevel() - 1]);
         holder.mHouseLabelTextView.setText(currentHouse.getName());
         holder.mDescriptionTextView.setText(currentHouse.getDesc());
+
+        int weeklyTime = currentHouse.getTotalTimeWeek();
+        int hoursThisWeek = weeklyTime / 60;
+        int minsThisWeek = weeklyTime % 60;
+        holder.mTimeSpentThisWeekTextTextView.setText(hoursThisWeek + "h " + minsThisWeek + "m");
+
+
+        // Time to next upgrade
+        if (currentHouse.getLevel() == 5) {
+            holder.mTimeToUpgradeTextTextView.setText("MAX LVL");
+            return;
+        }
+
+        int timeToUpgrade = House.timeLimit(currentHouse.getLevel()) - currentHouse.getTotaltime();
+        if (timeToUpgrade <= 0) {
+            return;
+        }
+
+        int hoursToUpgrade = timeToUpgrade / 60;
+        int minsToUpgrade = timeToUpgrade % 60;
+
+        holder.mTimeToUpgradeTextTextView.setText(hoursToUpgrade +"h " + minsToUpgrade +"m");
     }
 
     @Override

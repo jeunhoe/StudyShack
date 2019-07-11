@@ -37,6 +37,10 @@ public class House {
         return totalTime;
     }
 
+    public int getTotalTimeWeek() {
+        return totalTimeWeek;
+    }
+
     public void addTotalTime(int min) {
         totalTime += min;
     }

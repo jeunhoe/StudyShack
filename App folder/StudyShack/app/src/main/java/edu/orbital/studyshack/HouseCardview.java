@@ -89,13 +89,15 @@ public class HouseCardview extends AppCompatActivity {
                 house.addTotalTime(cc.getInt(0));
             }
 
+            // House weekly time
             String weekQuery = "select " + HouseDbHelper.KEY_INPUT + " from " +
                     HouseDbHelper.TABLE_NAME + " where " + HouseDbHelper.KEY_NAME + " = " + "\"" +
                     houseName + "\"" + " AND " + HouseDbHelper.KEY_WEEK + " = " + "\"" + week + "\"";
 
             Cursor ccc = db.rawQuery(weekQuery, null);
             while(ccc.moveToNext()) {
-                house.addWeekTime((ccc.getInt(0)));
+                int time = ccc.getInt(0);
+                house.addWeekTime(time);
             }
         }
 
