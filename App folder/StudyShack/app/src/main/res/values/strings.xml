@@ -18,4 +18,7 @@
     <string name="house_settings_label">House Settings</string>
     <string name="edit_button_label">Edit</string>
     <string name="delete_button_label">Delete</string>
+    <string name="time_spent_this_week_label">Time spent this week:</string>
+    <string name="time_to_upgrade_label">Time to upgrade:</string>
+    <string name="default_time_label">0h 00m</string>
 </resources>

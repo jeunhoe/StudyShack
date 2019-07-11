@@ -10,6 +10,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
         android:background="@color/card_background">
 
         <TextView
@@ -46,13 +47,50 @@
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             android:paddingLeft="15dp"
-            android:paddingTop="4dp"
             />
+
+        <TextView
+            android:id="@+id/time_spent_this_week_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/description_text"
+            android:paddingLeft="15dp"
+            android:paddingTop="10dp"
+            android:textSize="15dp"
+            android:text="@string/time_spent_this_week_label" />
+
+        <TextView
+            android:id="@+id/time_spent_this_week_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/time_spent_this_week_label"
+            android:layout_alignTop="@+id/time_spent_this_week_label"
+            android:paddingTop="10dp"
+            android:paddingLeft="4dp"
+            android:text="@string/default_time_label"/>
+
+        <TextView
+            android:id="@+id/time_to_upgrade_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/time_spent_this_week_label"
+            android:paddingLeft="15dp"
+            android:textSize="15dp"
+            android:text="@string/time_to_upgrade_label" />
+
+        <TextView
+            android:id="@+id/time_to_upgrade_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/time_to_upgrade_label"
+            android:layout_alignTop="@id/time_to_upgrade_label"
+            android:paddingLeft="4dp"
+            android:text="@string/default_time_label"/>
 
         <ImageView
             android:id="@+id/house_imageview"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
             android:layout_marginTop="8dp"
             android:layout_marginRight="0dp"
             android:layout_marginBottom="8dp"
