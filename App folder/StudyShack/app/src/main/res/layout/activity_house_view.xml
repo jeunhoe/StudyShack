@@ -62,20 +62,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/edit_text_input"
-        android:layout_width="120dp"
+    <me.tankery.lib.circularseekbar.CircularSeekBar
+        android:id="@+id/seek_bar"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:hint="Minutes"
-        android:inputType="time"
-        android:maxLength="4"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@+id/text_view_countdown"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_gravity="center_horizontal"
+        app:cs_circle_stroke_width="8dp"
+        app:cs_circle_style="round"
+        app:cs_negative_enabled="false"
+        app:cs_pointer_halo_width="4dp"
+        app:cs_pointer_stroke_width="24dp"
+        app:cs_circle_color = "#f3dcbf"
+        app:cs_circle_progress_color = "#54cab9"
+        app:cs_pointer_color = "#54cab9"
+        app:cs_max = "120"/>
+
+
 
     <TextView
         android:id="@+id/text_view_countdown"
@@ -85,8 +92,9 @@
         android:text="@string/default_time"
         android:textAlignment="center"
         android:textColor="@color/whiteText"
-        android:textSize="60sp"
-        app:layout_constraintBottom_toTopOf="@+id/button_start_stop"
+        android:textSize="44sp"
+        app:layout_constraintTop_toTopOf="@id/seek_bar"
+        app:layout_constraintBottom_toBottomOf="@id/seek_bar"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
@@ -98,7 +106,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="32dp"
         android:text="@string/start_button_label"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_countdown"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -125,7 +133,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="60dp"
         android:contentDescription="@string/houseview_description"
-        app:layout_constraintBottom_toTopOf="@+id/edit_text_input"
+        app:layout_constraintBottom_toTopOf="@id/seek_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/house_view_upgrade_button" />

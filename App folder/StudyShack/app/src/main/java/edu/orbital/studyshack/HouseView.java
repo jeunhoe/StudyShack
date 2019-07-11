@@ -20,6 +20,8 @@ import android.widget.Toast;
 import java.util.Calendar;
 import java.util.Locale;
 
+import me.tankery.lib.circularseekbar.CircularSeekBar;
+
 public class HouseView extends AppCompatActivity {
 
     private ImageView upButton;
@@ -27,10 +29,10 @@ public class HouseView extends AppCompatActivity {
     private ImageView settingsButton;
     private TextView houseViewHeader;
     private ImageView houseImage;
+    private CircularSeekBar seekBar;
     private TextView timeToUpgradeTextView;
 
     private TextView mTextViewCountdown;
-    private EditText mEditTextInput;
     private Button mButtonStartStop;
     private CountDownTimer mCountDownTimer;
     private boolean mTimerRunning;
@@ -54,12 +56,36 @@ public class HouseView extends AppCompatActivity {
     int currentHour;
     int currentMinute;
 
+    int seekBarProgress;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_house_view);
+
+
+        seekBar = findViewById(R.id.seek_bar);
+        seekBar.setOnSeekBarChangeListener(new CircularSeekBar.OnCircularSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(CircularSeekBar circularSeekBar, float progress, boolean fromUser) {
+                String message = String.format("%.0f", progress);
+                seekBarProgress = Integer.parseInt(message);
+                mTextViewCountdown.setText(message + ":00");
+            }
+
+            @Override
+            public void onStopTrackingTouch(CircularSeekBar seekBar) {
+                Log.d("Main", "onStopTrackingTouch");
+            }
+
+            @Override
+            public void onStartTrackingTouch(CircularSeekBar seekBar) {
+                Log.d("Main", "onStartTrackingTouch");
+            }
+        });
+
 
         // Tie layout files to java code
 
@@ -70,7 +96,6 @@ public class HouseView extends AppCompatActivity {
         houseImage = findViewById(R.id.houseview_house);
         timeToUpgradeTextView = findViewById(R.id.time_to_upgrade_textview);
 
-        mEditTextInput = findViewById(R.id.edit_text_input);
         mTextViewCountdown = findViewById(R.id.text_view_countdown);
         mButtonStartStop = findViewById(R.id.button_start_stop);
 
@@ -144,15 +169,13 @@ public class HouseView extends AppCompatActivity {
                     });
                     alert.show();
                 } else {
-                    String timeString = mEditTextInput.getText().toString();
-                    if (timeString.isEmpty()) {
+                    if (seekBarProgress == 0) {
                         Toast.makeText(getApplicationContext(), "Please input a time", Toast.LENGTH_LONG).show();
                         return;
                     }
-                    mStartTimeInMillis = Long.parseLong(timeString) * 60 * 1000;
+                    mStartTimeInMillis = ((long) seekBarProgress) * 60 * 1000;
                     mTimeLeftInMillis = mStartTimeInMillis;
                     startTimer();
-                    mEditTextInput.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -162,6 +185,7 @@ public class HouseView extends AppCompatActivity {
 
     public void startTimer() {
 
+        seekBar.setVisibility(View.INVISIBLE);
         long millis = System.currentTimeMillis();
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(millis);
@@ -184,11 +208,11 @@ public class HouseView extends AppCompatActivity {
 
             @Override
             public void onFinish() {
+                seekBar.setVisibility(View.VISIBLE);
+
                 mTimerRunning = false;
                 mButtonStartStop.setText("START");
                 mTextViewCountdown.setText("00:00");
-                mEditTextInput.setVisibility(View.VISIBLE);
-                mEditTextInput.setText("");
 
                 //specific database add input
                 ContentValues input = new ContentValues();
@@ -233,14 +257,14 @@ public class HouseView extends AppCompatActivity {
     }
 
     public void stopTimer() {
+        seekBar.setVisibility(View.VISIBLE);
+        
         mCountDownTimer.cancel();
         mTimerRunning = false;
         mTimeLeftInMillis = mStartTimeInMillis;
         updateCountDownText();
         mButtonStartStop.setText("START");
         mTextViewCountdown.setText("00:00");
-        mEditTextInput.setVisibility(View.VISIBLE);
-        mEditTextInput.setText("");
 
         checkUpgrade();
     }

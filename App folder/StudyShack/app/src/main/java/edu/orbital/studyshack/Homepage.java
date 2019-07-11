@@ -30,8 +30,10 @@ public class Homepage extends AppCompatActivity {
     }
 
     public void openStatistics(View view) {
+        Intent intent = new Intent(this, Statistics.class);
+        startActivity(intent);
         // not implemented yet, will navigate to Statistics activity later
-        Toast.makeText(this, "Not ready yet!", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "Not ready yet!", Toast.LENGTH_LONG).show();
     }
 
     public void openHouseCardview(View view) {
