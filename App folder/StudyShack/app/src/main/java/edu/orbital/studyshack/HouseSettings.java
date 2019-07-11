@@ -90,12 +90,13 @@ public class HouseSettings extends AppCompatActivity {
                         editedRow.put(HouseDbHelper.KEY_ID, dbSpecificCursor.getInt(0));
                         editedRow.put(HouseDbHelper.KEY_DAY, dbSpecificCursor.getInt(1));
                         editedRow.put(HouseDbHelper.KEY_DATE, dbSpecificCursor.getInt(2));
-                        editedRow.put(HouseDbHelper.KEY_MONTH, dbSpecificCursor.getInt(3));
-                        editedRow.put(HouseDbHelper.KEY_YEAR, dbSpecificCursor.getInt(4));
-                        editedRow.put(HouseDbHelper.KEY_HOUR, dbSpecificCursor.getInt(5));
-                        editedRow.put(HouseDbHelper.KEY_MINS, dbSpecificCursor.getInt(6));
+                        editedRow.put(HouseDbHelper.KEY_WEEK, dbSpecificCursor.getInt(3));
+                        editedRow.put(HouseDbHelper.KEY_MONTH, dbSpecificCursor.getInt(4));
+                        editedRow.put(HouseDbHelper.KEY_YEAR, dbSpecificCursor.getInt(5));
+                        editedRow.put(HouseDbHelper.KEY_HOUR, dbSpecificCursor.getInt(6));
+                        editedRow.put(HouseDbHelper.KEY_MINS, dbSpecificCursor.getInt(7));
                         editedRow.put(HouseDbHelper.KEY_NAME, newHouseName);
-                        editedRow.put(HouseDbHelper.KEY_INPUT, dbSpecificCursor.getInt(8));
+                        editedRow.put(HouseDbHelper.KEY_INPUT, dbSpecificCursor.getInt(9));
                         dbspecific.update(HouseDbHelper.TABLE_NAME, editedRow, HouseDbHelper.KEY_ID + " = ?",
                                 new String[]{chosenID});
 

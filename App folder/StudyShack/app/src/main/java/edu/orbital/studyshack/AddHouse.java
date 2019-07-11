@@ -39,7 +39,7 @@ public class AddHouse extends AppCompatActivity {
         mDescEditText = findViewById(R.id.houseDescriptionEditText);
 
         dbH = new HouseLevelDbHelper(this);
-        db = dbH.getReadableDatabase();
+        db = dbH.getWritableDatabase();
 
     }
 

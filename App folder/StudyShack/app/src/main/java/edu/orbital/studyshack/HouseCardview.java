@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
+import java.util.Calendar;
 import java.util.LinkedList;
 
 public class HouseCardview extends AppCompatActivity {
@@ -39,6 +40,7 @@ public class HouseCardview extends AppCompatActivity {
         setContentView(R.layout.activity_house_cardview);
 
         dbH = new HouseLevelDbHelper(this);
+        dbSpecific = new HouseDbHelper(this);
         db = dbH.getWritableDatabase();
 
         upButton = findViewById(R.id.house_cardview_up_button);
@@ -71,6 +73,8 @@ public class HouseCardview extends AppCompatActivity {
 
         // Summary statistics
         db = dbSpecific.getReadableDatabase();
+        Calendar calendar = Calendar.getInstance();
+        int week = calendar.get(Calendar.WEEK_OF_YEAR);
 
         for (int i = 0; i < houses.size(); i++) {
             House house = houses.get(i);
@@ -85,10 +89,14 @@ public class HouseCardview extends AppCompatActivity {
                 house.addTotalTime(cc.getInt(0));
             }
 
-            // House weekly time, HAVENT ADDED WEEK IN DB!!
             String weekQuery = "select " + HouseDbHelper.KEY_INPUT + " from " +
                     HouseDbHelper.TABLE_NAME + " where " + HouseDbHelper.KEY_NAME + " = " + "\"" +
-                    houseName + "\"" ;
+                    houseName + "\"" + " AND " + HouseDbHelper.KEY_WEEK + " = " + "\"" + week + "\"";
+
+            Cursor ccc = db.rawQuery(weekQuery, null);
+            while(ccc.moveToNext()) {
+                house.addWeekTime((ccc.getInt(0)));
+            }
         }
 
 
@@ -126,7 +134,6 @@ public class HouseCardview extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         db.close();
-        dbSpecific.close();
     }
 
     @Override

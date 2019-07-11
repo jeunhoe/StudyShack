@@ -51,6 +51,7 @@ public class HouseView extends AppCompatActivity {
 
     int currentDay;
     int currentDate;
+    int currentWeek;
     int currentMonth;
     int currentYear;
     int currentHour;
@@ -191,6 +192,7 @@ public class HouseView extends AppCompatActivity {
         cal.setTimeInMillis(millis);
         currentDay = cal.get(Calendar.DAY_OF_WEEK);
         currentDate = cal.get(Calendar.DAY_OF_MONTH);
+        currentWeek = cal.get(Calendar.WEEK_OF_YEAR);
         currentMonth = cal.get(Calendar.MONTH);
         currentYear = cal.get(Calendar.YEAR);
         currentHour = cal.get(Calendar.HOUR_OF_DAY);
@@ -218,11 +220,13 @@ public class HouseView extends AppCompatActivity {
                 ContentValues input = new ContentValues();
                 input.put(HouseDbHelper.KEY_DAY, currentDay);
                 input.put(HouseDbHelper.KEY_DATE, currentDate);
+                input.put(HouseDbHelper.KEY_WEEK, currentWeek);
                 input.put(HouseDbHelper.KEY_MONTH, currentMonth);
                 input.put(HouseDbHelper.KEY_YEAR, currentYear);
                 input.put(HouseDbHelper.KEY_HOUR, currentHour);
                 input.put(HouseDbHelper.KEY_MINS, currentMinute);
                 input.put(HouseDbHelper.KEY_NAME, housename);
+
                 long timeInputlong = mStartTimeInMillis / (60 * 1000);
                 int timeInput = (int) (long) timeInputlong;
                 input.put(HouseDbHelper.KEY_INPUT, timeInput);

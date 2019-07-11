@@ -9,6 +9,7 @@ public class HouseDbHelper extends SQLiteOpenHelper {
     public static final String KEY_ID = "id";
     public static final String KEY_DAY = "day";
     public static final String KEY_DATE = "date";
+    public static final String KEY_WEEK = "week";
     public static final String KEY_MONTH = "month";
     public static final String KEY_YEAR = "year";
     public static final String KEY_HOUR = "hour";
@@ -24,7 +25,7 @@ public class HouseDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String cmd = "create table " + TABLE_NAME + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_DAY + " INTEGER," +
-                KEY_DATE + " INTEGER," + KEY_MONTH + " INTEGER," + KEY_YEAR + " INTEGER," +
+                KEY_DATE + " INTEGER," + KEY_WEEK + " INTEGER," + KEY_MONTH + " INTEGER," + KEY_YEAR + " INTEGER," +
                 KEY_HOUR + " INTEGER," + KEY_MINS + " INTEGER," + KEY_NAME + " TEXT,"
                 + KEY_INPUT + " INTEGER)";
         db.execSQL(cmd);
