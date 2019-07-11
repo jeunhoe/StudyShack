@@ -24,6 +24,7 @@ public class HouseCardview extends AppCompatActivity {
 
     HouseLevelDbHelper dbH;
     SQLiteDatabase db;
+    HouseDbHelper dbSpecific;
 
     @Override
     public void onBackPressed() {
@@ -59,13 +60,35 @@ public class HouseCardview extends AppCompatActivity {
         houses = new LinkedList<>();
 
         Cursor c = db.rawQuery("select * from " + HouseLevelDbHelper.TABLE_NAME, null);
-        //Lyndon, need u to retrieve database and put all the houses into the linked list
 
+        // Basic house info
         while(c.moveToNext()){
             String name = c.getString(1);
             String desc = c.getString(2);
             int lvl = c.getInt(3);
             houses.add(new House(name, desc, lvl, 0));
+        }
+
+        // Summary statistics
+        db = dbSpecific.getReadableDatabase();
+
+        for (int i = 0; i < houses.size(); i++) {
+            House house = houses.get(i);
+            String houseName = house.getName();
+
+            // House total time
+            String query = "select " + HouseDbHelper.KEY_INPUT + " from " + HouseDbHelper.TABLE_NAME
+                    + " where " + HouseDbHelper.KEY_NAME + " = " + "\"" + houseName + "\"";
+            Cursor cc = db.rawQuery(query, null);
+
+            while (cc.moveToNext()) {
+                house.addTotalTime(cc.getInt(0));
+            }
+
+            // House weekly time, HAVENT ADDED WEEK IN DB!!
+            String weekQuery = "select " + HouseDbHelper.KEY_INPUT + " from " +
+                    HouseDbHelper.TABLE_NAME + " where " + HouseDbHelper.KEY_NAME + " = " + "\"" +
+                    houseName + "\"" ;
         }
 
 
@@ -103,6 +126,7 @@ public class HouseCardview extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         db.close();
+        dbSpecific.close();
     }
 
     @Override

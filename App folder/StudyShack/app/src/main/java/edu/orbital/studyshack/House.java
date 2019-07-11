@@ -6,7 +6,8 @@ public class House {
     private String name;
     private String desc;
     private int level;
-    private int totaltime;
+    private int totalTime;
+    private int totalTimeWeek;
     public static final int lvl1time = 0;
     public static final int lvl2time = 1;
     public static final int lvl3time = 2;
@@ -17,7 +18,7 @@ public class House {
         this.name = name;
         this.desc = desc;
         this.level = level;
-        this.totaltime = totaltime;
+        this.totalTime = totaltime;
     }
 
     public String getName() {
@@ -33,11 +34,15 @@ public class House {
     }
 
     public int getTotaltime() {
-        return totaltime;
+        return totalTime;
     }
 
-    public void addTime(int min) {
-        totaltime += min;
+    public void addTotalTime(int min) {
+        totalTime += min;
+    }
+
+    public void addWeekTime(int min) {
+        totalTimeWeek += min;
     }
 
     public static int timeLimit(int lvl){
