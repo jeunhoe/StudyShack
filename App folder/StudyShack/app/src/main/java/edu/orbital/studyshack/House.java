@@ -14,11 +14,12 @@ public class House {
     public static final int lvl4time = 4;
     public static final int lvl5time = Integer.MAX_VALUE;
 
-    public House(String name, String desc, int level, int totaltime) {
+    public House(String name, String desc, int level) {
         this.name = name;
         this.desc = desc;
         this.level = level;
-        this.totalTime = totaltime;
+        this.totalTime = 0;
+        this.totalTimeWeek = 0;
     }
 
     public String getName() {

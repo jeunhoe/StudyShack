@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -68,39 +69,12 @@ public class HouseCardview extends AppCompatActivity {
             String name = c.getString(1);
             String desc = c.getString(2);
             int lvl = c.getInt(3);
-            houses.add(new House(name, desc, lvl, 0));
+            houses.add(new House(name, desc, lvl));
         }
 
         // Summary statistics
         db = dbSpecific.getReadableDatabase();
-        Calendar calendar = Calendar.getInstance();
-        int week = calendar.get(Calendar.WEEK_OF_YEAR);
-
-        for (int i = 0; i < houses.size(); i++) {
-            House house = houses.get(i);
-            String houseName = house.getName();
-
-            // House total time
-            String query = "select " + HouseDbHelper.KEY_INPUT + " from " + HouseDbHelper.TABLE_NAME
-                    + " where " + HouseDbHelper.KEY_NAME + " = " + "\"" + houseName + "\"";
-            Cursor cc = db.rawQuery(query, null);
-
-            while (cc.moveToNext()) {
-                house.addTotalTime(cc.getInt(0));
-            }
-
-            // House weekly time
-            String weekQuery = "select " + HouseDbHelper.KEY_INPUT + " from " +
-                    HouseDbHelper.TABLE_NAME + " where " + HouseDbHelper.KEY_NAME + " = " + "\"" +
-                    houseName + "\"" + " AND " + HouseDbHelper.KEY_WEEK + " = " + "\"" + week + "\"";
-
-            Cursor ccc = db.rawQuery(weekQuery, null);
-            while(ccc.moveToNext()) {
-                int time = ccc.getInt(0);
-                house.addWeekTime(time);
-            }
-        }
-
+        updateSummaryStatistics(houses, db);
 
         mRecyclerView = findViewById(R.id.recyclerview);
         mRecyclerView.setHasFixedSize(true);
@@ -128,23 +102,27 @@ public class HouseCardview extends AppCompatActivity {
 
     @Override
     protected void onStart() {
+        Log.d("debug", "onstart");
         super.onStart();
         db = dbH.getWritableDatabase();
     }
 
     @Override
     protected void onStop() {
+        Log.d("debug", "onstop");
         super.onStop();
         db.close();
     }
 
     @Override
     protected void onPause() {
+        Log.d("debug", "onpause");
         super.onPause();
     }
 
     @Override
     protected void onResume() {
+        Log.d("debug", "onresume");
         super.onResume();
         db = dbH.getWritableDatabase();
         this.updateRecyclerView();
@@ -153,13 +131,50 @@ public class HouseCardview extends AppCompatActivity {
 
     private void updateRecyclerView() {
         houses.clear();
+        db = dbH.getReadableDatabase();
         Cursor c = db.rawQuery("select * from " + HouseLevelDbHelper.TABLE_NAME, null);
 
         while(c.moveToNext()){
             String name = c.getString(1);
             String desc = c.getString(2);
             int lvl = c.getInt(3);
-            houses.add(new House(name, desc, lvl, 0));
+            houses.add(new House(name, desc, lvl));
+
+
+        }
+        db = dbSpecific.getReadableDatabase();
+        updateSummaryStatistics(houses, db);
+    }
+
+    private void updateSummaryStatistics(LinkedList<House> houses, SQLiteDatabase database){
+
+        Calendar calendar = Calendar.getInstance();
+        int week = calendar.get(Calendar.WEEK_OF_YEAR);
+
+        for (int i = 0; i < houses.size(); i++) {
+            House house = houses.get(i);
+            String houseName = house.getName();
+
+            // House total time
+            String query = "select " + HouseDbHelper.KEY_INPUT + " from " + HouseDbHelper.TABLE_NAME
+                    + " where " + HouseDbHelper.KEY_NAME + " = " + "\"" + houseName + "\"";
+            Cursor cc = database.rawQuery(query, null);
+
+            while (cc.moveToNext()) {
+                house.addTotalTime(cc.getInt(0));
+            }
+
+            // House weekly time
+            String weekQuery = "select " + HouseDbHelper.KEY_INPUT + " from " +
+                    HouseDbHelper.TABLE_NAME + " where " + HouseDbHelper.KEY_NAME + " = " + "\"" +
+                    houseName + "\"" + " AND " + HouseDbHelper.KEY_WEEK + " = " + "\"" + week + "\"";
+
+            Cursor ccc = database.rawQuery(weekQuery, null);
+
+            while(ccc.moveToNext()) {
+                int time = ccc.getInt(0);
+                house.addWeekTime(time);
+            }
         }
     }
 }
