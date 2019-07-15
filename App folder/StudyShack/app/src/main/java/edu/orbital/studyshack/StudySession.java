@@ -1,6 +1,6 @@
 package edu.orbital.studyshack;
 
-public abstract class StudySession {
+public class StudySession {
     private int hour;
     private int minute;
     private int timeSpent;

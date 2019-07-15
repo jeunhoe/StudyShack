@@ -17,6 +17,7 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.LinkedList;
 
 public class Statistics extends AppCompatActivity {
@@ -35,6 +36,16 @@ public class Statistics extends AppCompatActivity {
     Spinner houseNameDropdown;
     Spinner timeFilterDropdown;
 
+    // Filters
+    String houseName = "ALL";
+    String timePeriod = "DAY";
+
+    Calendar calendar = Calendar.getInstance();
+    Cursor search;
+    LinkedList<StudySession> studySessions;
+    int[] graphOfStudySessions;
+    LinkedList<BarEntry> sessionsToDisplay;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,26 +60,41 @@ public class Statistics extends AppCompatActivity {
         });
 
 
-        barChart = findViewById(R.id.barGraph);
-        ArrayList<BarEntry> barEntries = new ArrayList<>();
-        barEntries.add(new BarEntry(44f, 0));
-        barEntries.add(new BarEntry(30f, 1));
-        barEntries.add(new BarEntry(20f, 2));
-        barEntries.add(new BarEntry(10f, 3));
-        barEntries.add(new BarEntry(5f, 4));
-        barEntries.add(new BarEntry(28f, 5));
-        BarDataSet barDataSet = new BarDataSet(barEntries, "Dates");
+//        ArrayList<BarEntry> barEntries = new ArrayList<>();
+//        barEntries.add(new BarEntry(44f, 0));
+//        barEntries.add(new BarEntry(30f, 1));
+//        barEntries.add(new BarEntry(20f, 2));
+//        barEntries.add(new BarEntry(10f, 3));
+//        barEntries.add(new BarEntry(5f, 4));
+//        barEntries.add(new BarEntry(28f, 5));
+//        BarDataSet barDataSet = new BarDataSet(barEntries, "Dates");
+//
+//        BarData barData = new BarData();
+//        barData.addDataSet(barDataSet);
+//
+//        barChart.setData(barData);
+//        barChart.invalidate();
 
-        BarData barData = new BarData();
-        barData.addDataSet(barDataSet);
 
-        barChart.setData(barData);
-        barChart.invalidate();
 
         setupDatabase();
         readDatabaseBasic();
 
         updateDropDown();
+
+        barChart = findViewById(R.id.barGraph);
+        beginSearch();
+        updateEntries();
+        addToArrayGraph();
+        addToEntryList();
+        BarDataSet barDataSet = new BarDataSet(sessionsToDisplay, "STUDY SESSIONS");
+        BarData barData = new BarData();
+        barData.addDataSet(barDataSet);
+
+        barChart.setData(barData);
+        barChart.setDragEnabled(false);
+        barChart.setScaleEnabled(false);
+        barChart.invalidate();
     }
 
     public void setupDatabase() {
@@ -111,4 +137,90 @@ public class Statistics extends AppCompatActivity {
         houseNameDropdown.setAdapter(adapterName);
         timeFilterDropdown.setAdapter(adapterTime);
     }
+
+//    public void updateGraph() {
+//        changeFilters();
+//        Calendar calendar = Calendar.getInstance();
+//
+//        if (houseName.equals("All")) {
+//            Cursor c = dbSpecificSQL.rawQuery();
+//
+//        } else {
+//            Cursor c = dbSpecificSQL.rawQuery();
+//            if(timePeriod == "Day"){
+//                timeperiodmethod
+//            }else if (timePeriod == "Week"){
+//                weekperiodmethod
+//            }
+//        }
+//    }
+
+    public void changeFilters() {
+        houseName = (String) houseNameDropdown.getSelectedItem();
+        timePeriod = (String) timeFilterDropdown.getSelectedItem();
+    }
+
+    public void beginSearch() {
+        String day = "" + calendar.get(Calendar.DAY_OF_MONTH);
+        String week = "" + calendar.get(Calendar.WEEK_OF_YEAR);
+        String month = "" + calendar.get(Calendar.MONTH);
+        String year = "" + calendar.get(Calendar.YEAR);
+
+        if (timePeriod.equals("DAY")) {
+            String query = "select hour, minutes, input from HouseInputs WHERE date = " + "\"" + day + "\"" + " AND month = "
+                    + "\"" + month + "\"" + " AND year = " + "\"" + year + "\"";
+            if (!houseName.equals("ALL")) {
+                query = query + " AND housename = ?" ;
+                search = dbSpecificSQL.rawQuery(query, null); // SPECIFIC SEARCH
+            } else {
+                search = dbSpecificSQL.rawQuery(query, null); // ALL SEARCH
+            }
+                graphOfStudySessions = new int[24];
+        }
+    }
+
+
+    public void updateEntries() {
+        studySessions = new LinkedList<>();
+        while(search.moveToNext()) {
+            int hour = search.getInt(0);
+            int min = search.getInt(1);
+            int input = search.getInt(2);
+            studySessions.add(new StudySession(search.getInt(0), search.getInt(1), search.getInt(2)));
+        }
+    }
+
+    public void addToArrayGraph() {
+        while(!studySessions.isEmpty()) {
+            StudySession session = studySessions.poll();
+            if (session.exceedsFirstHour()) {
+                int firstHourStudied = session.getHour();
+                graphOfStudySessions[firstHourStudied] += session.clockFirstHour();
+                if (session.exceedsSecondHour()){
+                    int secondHourStudied = session.getHour();
+                    graphOfStudySessions[secondHourStudied] += session.clockSecondHour();
+                    int thirdHourStudied = session.getHour();
+                    graphOfStudySessions[thirdHourStudied] += session.clockRemaining();
+                } else {
+                    int secondHourStudied = session.getHour();
+                    graphOfStudySessions[secondHourStudied] += session.clockRemaining();
+                }
+            } else {
+                int firstHourStudied = session.getHour();
+                graphOfStudySessions[firstHourStudied] += session.clockRemaining();
+            }
+        }
+    }
+
+    public void addToEntryList() {
+        sessionsToDisplay = new LinkedList<>();
+        float xValue = 0;
+        for (Integer timeSpent: graphOfStudySessions) {
+            sessionsToDisplay.add(new BarEntry(xValue, (float) timeSpent));
+            xValue++;
+        }
+    }
+
+
+
 }
