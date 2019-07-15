@@ -7,21 +7,6 @@
     tools:context=".HouseView"
     android:background="@drawable/background">
 
-    <TextView
-        android:id="@+id/time_to_upgrade_label"
-        android:layout_width="0dp"
-        android:layout_height="49dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:fontFamily="@font/quicksand_bold"
-        android:text="@string/time_to_upgrade_textview"
-        android:textAlignment="viewStart"
-        android:textColor="@color/whiteText"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button_start_stop"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_countdown" />
-
     <ImageView
         android:id="@+id/house_view_settings_button"
         android:layout_width="54dp"
@@ -74,6 +59,8 @@
         android:layout_gravity="center_horizontal"
         app:cs_circle_stroke_width="8dp"
         app:cs_circle_style="round"
+        app:cs_start_angle="160"
+        app:cs_end_angle="20"
         app:cs_negative_enabled="false"
         app:cs_pointer_halo_width="4dp"
         app:cs_pointer_stroke_width="24dp"
@@ -83,32 +70,34 @@
         app:cs_max = "120"/>
 
 
-
     <TextView
         android:id="@+id/text_view_countdown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="48dp"
         android:text="@string/default_time"
         android:textAlignment="center"
         android:textColor="@color/whiteText"
-        android:textSize="44sp"
-        app:layout_constraintTop_toTopOf="@id/seek_bar"
-        app:layout_constraintBottom_toBottomOf="@id/seek_bar"
+        android:textSize="54sp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/houseview_house" />
 
     <Button
         android:id="@+id/button_start_stop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="110dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="32dp"
+        android:background="@color/cardview_label"
         android:text="@string/start_button_label"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_countdown"
+        app:layout_constraintBottom_toBottomOf="@+id/seek_bar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/houseview_house"
+
+        />
 
     <ImageView
         android:id="@+id/house_view_upgrade_button"
@@ -137,17 +126,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/house_view_upgrade_button" />
-
-    <TextView
-        android:id="@+id/time_to_upgrade_textview"
-        android:layout_width="121dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="8dp"
-        android:fontFamily="@font/quicksand_bold"
-        android:textAlignment="center"
-        android:textColor="@color/whiteText"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/time_to_upgrade_label" />
 
 </android.support.constraint.ConstraintLayout>

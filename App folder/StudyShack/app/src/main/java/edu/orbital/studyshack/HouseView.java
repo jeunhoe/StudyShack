@@ -30,7 +30,6 @@ public class HouseView extends AppCompatActivity {
     private TextView houseViewHeader;
     private ImageView houseImage;
     private CircularSeekBar seekBar;
-    private TextView timeToUpgradeTextView;
 
     private TextView mTextViewCountdown;
     private Button mButtonStartStop;
@@ -95,7 +94,6 @@ public class HouseView extends AppCompatActivity {
         settingsButton = findViewById(R.id.house_view_settings_button);
         houseViewHeader = findViewById(R.id.house_view_header);
         houseImage = findViewById(R.id.houseview_house);
-        timeToUpgradeTextView = findViewById(R.id.time_to_upgrade_textview);
 
         mTextViewCountdown = findViewById(R.id.text_view_countdown);
         mButtonStartStop = findViewById(R.id.button_start_stop);
@@ -136,19 +134,6 @@ public class HouseView extends AppCompatActivity {
         //setting house image
         houseImage.setImageResource(House.HOUSE_IMAGES[(houselevel - 1)]);
         houseViewHeader.setText(housename);
-
-        //pull needed data to set the time left to upgrade
-        if (houselevel == 5) {
-            timeToUpgradeTextView.setText("Highest Level Reached!");
-        } else {
-            int timeLeft = House.timeLimit(houselevel) - checkInputTiming(dbspecific);
-            if (timeLeft > 0) {
-                timeToUpgradeTextView.setText(timeLeft + " mins");
-            } else {
-                timeToUpgradeTextView.setText("0 mins");
-            }
-        }
-
 
         mButtonStartStop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -244,15 +229,7 @@ public class HouseView extends AppCompatActivity {
                 } else {
                     housetiming = getTotaltime(dbspecific, housename);
                     checkUpgrade();
-
-                    int timeLeft = House.timeLimit(houselevel) - checkInputTiming(dbspecific);
-                    if (timeLeft > 0) {
-                        timeToUpgradeTextView.setText(timeLeft + " mins");
-                    } else {
-                        timeToUpgradeTextView.setText("0 mins");
-                    }
                 }
-
             }
         }.start();
 
@@ -344,17 +321,9 @@ public class HouseView extends AppCompatActivity {
 
         if (houselevel == 5) {
             Log.d("HouseView", "House is already max level");
-            timeToUpgradeTextView.setText("Max Level Reached!");
         } else {
             housetiming = getTotaltime(dbspecific, housename);
             checkUpgrade();
-
-            int timeLeft = House.timeLimit(houselevel) - checkInputTiming(dbspecific);
-            if (timeLeft > 0) {
-                timeToUpgradeTextView.setText(timeLeft + " mins");
-            } else {
-                timeToUpgradeTextView.setText("0 mins");
-            }
         }
     }
 
