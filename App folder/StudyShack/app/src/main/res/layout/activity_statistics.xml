@@ -4,13 +4,61 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Statistics">
+    tools:context=".Statistics"
+    android:background="@drawable/dark_background">
+
+    <ImageView
+        android:id="@+id/statistics_up_button"
+        android:layout_width="54dp"
+        android:layout_height="57dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/back_button" />
+
+    <Spinner
+        android:id="@+id/spinner_house_name"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp"
+        android:background="@null"
+        android:popupBackground="@android:color/transparent"
+
+        android:spinnerMode="dropdown"/>
+
+    <Spinner
+        android:id="@+id/spinner_time_filter"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/spinner_house_name"
+        android:layout_centerHorizontal="true"
+        android:background="@null"
+        android:popupBackground="@android:color/transparent"
+        android:spinnerMode="dropdown" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:text="OK"
+        android:layout_toRightOf="@id/spinner_house_name"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="37dp"
+        />
 
 
 
     <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/barGraph"
         android:layout_width="match_parent"
         android:layout_height="400dp"
-        android:id="@+id/barGraph"></com.github.mikephil.charting.charts.BarChart>
+        android:layout_below="@id/spinner_time_filter"
+        android:layout_marginTop="0dp"></com.github.mikephil.charting.charts.BarChart>
+
+
 
 </RelativeLayout>
