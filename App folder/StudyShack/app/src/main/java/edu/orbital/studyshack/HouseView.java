@@ -337,19 +337,28 @@ public class HouseView extends AppCompatActivity {
         }
     }
 
-    public int checkInputTiming(SQLiteDatabase db) {
-        int result = 0;
-
-        String query = "select " + HouseDbHelper.KEY_INPUT + " from " + HouseDbHelper.TABLE_NAME +
-                " where " + HouseDbHelper.KEY_NAME + " = ?";
-        Cursor c = db.rawQuery(query, new String[]{housename});
-
-        while (c.moveToNext()) {
-            result += c.getInt(0);
+    @Override
+    public void onBackPressed() {
+        if (mTimerRunning) {
+            AlertDialog.Builder alert = new AlertDialog.Builder(HouseView.this);
+            alert.setTitle("Confirmation");
+            alert.setMessage("Are you sure you want to stop the timer? All progress will be lost!");
+            alert.setNegativeButton("NO", null);
+            alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (mTimerRunning) {
+                        stopTimer();
+                        HouseView.super.onBackPressed();
+                    } else {
+                        return;
+                    }
+                }
+            });
+            alert.show();
+        } else {
+            super.onBackPressed();
         }
-
-        return result;
     }
-
 }
 
