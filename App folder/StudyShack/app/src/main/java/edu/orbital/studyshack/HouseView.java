@@ -1,6 +1,8 @@
 package edu.orbital.studyshack;
 
 import android.app.ActivityManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,6 +11,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -61,13 +65,11 @@ public class HouseView extends AppCompatActivity {
 
     int seekBarProgress;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_house_view);
-
 
         seekBar = findViewById(R.id.seek_bar);
         seekBar.setOnSeekBarChangeListener(new CircularSeekBar.OnCircularSeekBarChangeListener() {
@@ -352,6 +354,15 @@ public class HouseView extends AppCompatActivity {
         settingsButton.setVisibility(View.VISIBLE);
         upButton.setVisibility(View.VISIBLE);
         checkUpgrade();
+    }
+
+    @Override
+    protected void onUserLeaveHint() {
+        Log.d("activity","Home button pressed");
+        if (mTimerRunning) {
+            stopTimer();
+        }
+        super.onUserLeaveHint();
     }
 
     @Override
