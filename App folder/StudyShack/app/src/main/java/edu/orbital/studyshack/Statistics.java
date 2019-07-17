@@ -13,14 +13,18 @@ import android.widget.Spinner;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.LegendEntry;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Statistics extends AppCompatActivity {
 
@@ -75,36 +79,7 @@ public class Statistics extends AppCompatActivity {
         updateDropDown();
 
         barChart = findViewById(R.id.barGraph);
-        beginSearch();
-        updateEntries();
-        addToArrayGraph();
-        addToEntryList();
-        BarDataSet barDataSet = new BarDataSet(sessionsToDisplay, "STUDY SESSIONS");
-        BarData barData = new BarData();
-        barData.addDataSet(barDataSet);
-
-        barChart.setData(barData);
-
-        //removing legend
-        Legend legend = barChart.getLegend();
-        legend.setEnabled(false);
-
-        //removing description
-        barChart.getDescription().setEnabled(false);
-
-        //removing grid behind
-        barChart.getAxisRight().setDrawGridLines(false);
-        barChart.getAxisLeft().setDrawGridLines(false);
-        barChart.getXAxis().setDrawGridLines(false);
-
-        //Set axis colors
-        barChart.getAxisLeft().setTextColor(getResources().getColor(R.color.whiteText));
-        barChart.getXAxis().setTextColor(getResources().getColor(R.color.whiteText));
-        barChart.getAxisRight().setDrawLabels(false);
-
-        barChart.setDragEnabled(false);
-        barChart.setScaleEnabled(false);
-        barChart.invalidate();
+        setUpGraph(barChart);
     }
 
     public void setupDatabase() {
@@ -150,61 +125,14 @@ public class Statistics extends AppCompatActivity {
         timeFilterDropdown.setAdapter(adapterTime);
     }
 
-//    public void updateGraph() {
-//        changeFilters();
-//        Calendar calendar = Calendar.getInstance();
-//
-//        if (houseName.equals("All")) {
-//            Cursor c = dbSpecificSQL.rawQuery();
-//
-//        } else {
-//            Cursor c = dbSpecificSQL.rawQuery();
-//            if(timePeriod == "Day"){
-//                timeperiodmethod
-//            }else if (timePeriod == "Week"){
-//                weekperiodmethod
-//            }
-//        }
-//    }
-
     public void changeFilters(View view) {
         houseName = (String) houseNameDropdown.getSelectedItem();
         timePeriod = (String) timeFilterDropdown.getSelectedItem();
-        beginSearch();
-        updateEntries();
-        addToArrayGraph();
-        addToEntryList();
-        BarDataSet barDataSet = new BarDataSet(sessionsToDisplay, "STUDY SESSIONS");
-        BarData barData = new BarData();
-        barData.addDataSet(barDataSet);
-
-        barChart.setData(barData);
-
-        //removing legend
-        Legend legend = barChart.getLegend();
-        legend.setEnabled(false);
-
-        //removing description
-        barChart.getDescription().setEnabled(false);
-
-        //removing grid behind
-        barChart.getAxisRight().setDrawGridLines(false);
-        barChart.getAxisLeft().setDrawGridLines(false);
-        barChart.getXAxis().setDrawGridLines(false);
-
-        //Set axis colors
-        barChart.getAxisLeft().setTextColor(getResources().getColor(R.color.whiteText));
-        barChart.getXAxis().setTextColor(getResources().getColor(R.color.whiteText));
-        barChart.getAxisRight().setDrawLabels(false);
-
-        barChart.setDragEnabled(false);
-        barChart.setScaleEnabled(false);
-        barChart.invalidate();
+        setUpGraph(barChart);
     }
 
     //just to set the cursor and the length of the array for the x-axis
     public void beginSearch() {
-        String day = "" + calendar.get(Calendar.DAY_OF_WEEK);
         String date = "" + calendar.get(Calendar.DAY_OF_MONTH);
         String week = "" + calendar.get(Calendar.WEEK_OF_YEAR);
         String month = "" + calendar.get(Calendar.MONTH);
@@ -220,7 +148,7 @@ public class Statistics extends AppCompatActivity {
             } else {
                 search = dbSpecificSQL.rawQuery(query, null); // ALL SEARCH
             }
-                graphOfStudySessions = new int[24];
+            graphOfStudySessions = new int[24];
         } else if (timePeriod.equals("Week")) {
             String query = "select day, hour, minutes, input from HouseInputs WHERE week = " + "\"" + week + "\"" + " AND year = " + "\"" + year + "\"";
             if (!houseName.equals("ALL")) {
@@ -306,7 +234,7 @@ public class Statistics extends AppCompatActivity {
                 }
             }
         } else if (timePeriod.equals("Week") || timePeriod.equals("Month")) {
-            while (!studySessionsDay.isEmpty()){
+            while (!studySessionsDay.isEmpty()) {
                 StudySessionDay session = studySessionsDay.poll();
                 if (session.exceedsDay()) {
                     int getFirstDay = session.getDay();
@@ -319,7 +247,7 @@ public class Statistics extends AppCompatActivity {
         } else if (timePeriod.equals("Year")) {
             while (!studySessionsMonth.isEmpty()) {
                 StudySessionMonth session = studySessionsMonth.poll();
-                if(session.exceedsMonth()) {
+                if (session.exceedsMonth()) {
                     graphOfStudySessions[session.getMonth()] += session.clockMonth();
                     graphOfStudySessions[session.getMonth() + 1] += session.clockRemaining();
                 } else {
@@ -332,10 +260,83 @@ public class Statistics extends AppCompatActivity {
     public void addToEntryList() {
         sessionsToDisplay = new LinkedList<>();
         float xValue = 1;
-        for (Integer timeSpent: graphOfStudySessions) {
-            sessionsToDisplay.add(new BarEntry(xValue, (float) timeSpent));
-            xValue++;
+        if (timePeriod.equals("Day")) {
+            for (Integer timeSpent : graphOfStudySessions) {
+                sessionsToDisplay.add(new BarEntry(xValue, (float) timeSpent));
+                xValue++;
+            }
+        } else {
+            for (Integer timeSpent : graphOfStudySessions) {
+                sessionsToDisplay.add(new BarEntry(xValue, (float) timeSpent / 60));
+                xValue++;
+            }
         }
     }
+
+    public void setUpGraph(BarChart barChart) {
+        beginSearch();
+        updateEntries();
+        addToArrayGraph();
+        addToEntryList();
+        BarDataSet barDataSet = new BarDataSet(sessionsToDisplay, "STUDY SESSIONS");
+        int[] colorBars = {R.color.orange};
+        barDataSet.setColors(colorBars, this);
+        BarData barData = new BarData();
+        barData.addDataSet(barDataSet);
+
+        barChart.setData(barData);
+
+        //removing description
+        barChart.getDescription().setEnabled(false);
+
+        //removing grid behind
+        barChart.getAxisRight().setDrawGridLines(false);
+        barChart.getAxisLeft().setDrawGridLines(false);
+        barChart.getXAxis().setDrawGridLines(false);
+        barChart.getAxisLeft().setDrawZeroLine(true);
+
+        //Set axis colors
+        barChart.getAxisLeft().setTextColor(getResources().getColor(R.color.whiteText));
+        barChart.getXAxis().setTextColor(getResources().getColor(R.color.whiteText));
+        barChart.getAxisRight().setDrawLabels(false);
+
+        //set y-axis and x-axis labels based on timeperiod and Legend's color & description
+        Legend legend = barChart.getLegend();
+        legend.setTextColor(R.color.whiteText);
+        legend.setTextSize(30);
+        List<LegendEntry> entries = new ArrayList<>();
+        LegendEntry entry = new LegendEntry();
+        entry.formColor = R.color.orange;
+        legend.setCustom(entries);
+
+        if (timePeriod.equals("Day")) {
+            barChart.getAxisLeft().setAxisMaximum(60);
+            entry.label = "Minutes"; //only in terms of Day, the bars are in terms of Minutes
+            entries.add(entry);
+            legend.setCustom(entries);
+        } else if (timePeriod.equals("Week")) {
+            String[] labels = {"", "MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"}; //have to add extra "" at start to push MON to index 1.
+            barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
+            barChart.getAxisLeft().setAxisMaximum(24);
+            entry.label = "Hours";
+            entries.add(entry);
+            legend.setCustom(entries);
+        } else if (timePeriod.equals("Month")) {
+            barChart.getAxisLeft().setAxisMaximum(24);
+            entry.label = "Hours";
+            entries.add(entry);
+            legend.setCustom(entries);
+        } else {
+            entry.label = "Hours";
+            entries.add(entry);
+            legend.setCustom(entries);
+        }
+        barChart.getAxisLeft().setAxisMinimum(0);
+
+    //setting graph drag/touch enabled = false and refresh drawing of graph
+        barChart.setDragEnabled(false);
+        barChart.setScaleEnabled(false);
+        barChart.invalidate();
+}
 
 }
