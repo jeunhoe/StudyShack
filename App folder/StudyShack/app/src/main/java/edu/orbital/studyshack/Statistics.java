@@ -40,8 +40,8 @@ public class Statistics extends AppCompatActivity {
     Spinner timeFilterDropdown;
 
     // Filters
-    String houseName = "ALL";
-    String timePeriod = "Day";
+    String houseName;
+    String timePeriod;
 
     Calendar calendar = Calendar.getInstance();
     Cursor search;
@@ -65,6 +65,9 @@ public class Statistics extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+        houseName = "ALL";
+        timePeriod = "Day";
 
         setupDatabase();
         readDatabaseBasic();
@@ -212,7 +215,7 @@ public class Statistics extends AppCompatActivity {
             String query = "select hour, minutes, input from HouseInputs WHERE date = " + "\"" + date + "\"" + " AND month = "
                     + "\"" + month + "\"" + " AND year = " + "\"" + year + "\"";
             if (!houseName.equals("ALL")) {
-                query = query + " AND housename = ?" ;
+                query = query + " AND housename = " + "\"" + houseName + "\"";
                 search = dbSpecificSQL.rawQuery(query, null); // SPECIFIC SEARCH
             } else {
                 search = dbSpecificSQL.rawQuery(query, null); // ALL SEARCH
@@ -221,13 +224,30 @@ public class Statistics extends AppCompatActivity {
         } else if (timePeriod.equals("Week")) {
             String query = "select day, hour, minutes, input from HouseInputs WHERE week = " + "\"" + week + "\"" + " AND year = " + "\"" + year + "\"";
             if (!houseName.equals("ALL")) {
-                query = query + " AND housename = ?" ;
+                query = query + " AND housename = " + "\"" + houseName + "\"";
                 search = dbSpecificSQL.rawQuery(query, null); // SPECIFIC SEARCH
             } else {
                 search = dbSpecificSQL.rawQuery(query, null); // ALL SEARCH
             }
             graphOfStudySessions = new int[7];
-            //graphOfStudySessions = new int[calendar.getActualMaximum(Calendar.DAY_OF_MONTH)];
+        } else if (timePeriod.equals("Month")) {
+            String query = "select day, hour, minutes, input from HouseInputs WHERE month = " + "\"" + month + "\"" + " AND year = " + "\"" + year + "\"";
+            if (!houseName.equals("ALL")) {
+                query = query + " AND housename = " + "\"" + houseName + "\"";
+                search = dbSpecificSQL.rawQuery(query, null); // SPECIFIC SEARCH
+            } else {
+                search = dbSpecificSQL.rawQuery(query, null); // ALL SEARCH
+            }
+            graphOfStudySessions = new int[calendar.getActualMaximum(Calendar.DAY_OF_MONTH)];
+        } else if (timePeriod.equals("Year")) {
+            String query = "select day, month, year, hour, minutes, input from HouseInputs WHERE year = " + "\"" + year + "\"";
+            if (!houseName.equals("ALL")) {
+                query = query + " AND housename = " + "\"" + houseName + "\"";
+                search = dbSpecificSQL.rawQuery(query, null); // SPECIFIC SEARCH
+            } else {
+                search = dbSpecificSQL.rawQuery(query, null); // ALL SEARCH
+            }
+            graphOfStudySessions = new int[12];
         }
     }
 
@@ -241,7 +261,7 @@ public class Statistics extends AppCompatActivity {
                 int input = search.getInt(2);
                 studySessions.add(new StudySession(hour, min, input));
             }
-        } else if (timePeriod.equals("Week")) {
+        } else if (timePeriod.equals("Week") || timePeriod.equals("Month")) {
             studySessionsDay = new LinkedList<>();
             while (search.moveToNext()) {
                 int day = search.getInt(0);
@@ -249,7 +269,17 @@ public class Statistics extends AppCompatActivity {
                 int min = search.getInt(2);
                 int input = search.getInt(3);
                 studySessionsDay.add(new StudySessionDay(day, hour, min, input));
-
+            }
+        } else if (timePeriod.equals("Year")) {
+            studySessionsMonth = new LinkedList<>();
+            while (search.moveToNext()) {
+                int day = search.getInt(0);
+                int month = search.getInt(1);
+                int year = search.getInt(2);
+                int hour = search.getInt(3);
+                int min = search.getInt(4);
+                int input = search.getInt(5);
+                studySessionsMonth.add(new StudySessionMonth(day, month, year, hour, min, input));
             }
         }
     }
@@ -275,7 +305,7 @@ public class Statistics extends AppCompatActivity {
                     graphOfStudySessions[firstHourStudied] += session.clockRemaining();
                 }
             }
-        } else if (timePeriod.equals("Week")) {
+        } else if (timePeriod.equals("Week") || timePeriod.equals("Month")) {
             while (!studySessionsDay.isEmpty()){
                 StudySessionDay session = studySessionsDay.poll();
                 if (session.exceedsDay()) {
@@ -284,6 +314,16 @@ public class Statistics extends AppCompatActivity {
                     graphOfStudySessions[getFirstDay + 1] += session.clockRemaining();
                 } else {
                     graphOfStudySessions[session.getDay()] += session.clockRemaining();
+                }
+            }
+        } else if (timePeriod.equals("Year")) {
+            while (!studySessionsMonth.isEmpty()) {
+                StudySessionMonth session = studySessionsMonth.poll();
+                if(session.exceedsMonth()) {
+                    graphOfStudySessions[session.getMonth()] += session.clockMonth();
+                    graphOfStudySessions[session.getMonth() + 1] += session.clockRemaining();
+                } else {
+                    graphOfStudySessions[session.getMonth()] += session.clockRemaining();
                 }
             }
         }

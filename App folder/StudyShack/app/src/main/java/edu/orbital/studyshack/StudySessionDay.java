@@ -1,11 +1,11 @@
 package edu.orbital.studyshack;
 
 public class StudySessionDay extends StudySession {
-    int day;
+    int date;
 
-    public StudySessionDay(int day, int hour, int minute, int timeSpent) {
+    public StudySessionDay(int date, int hour, int minute, int timeSpent) {
         super(hour, minute, timeSpent);
-        this.day = day;
+        this.date = date;
     }
 
     public boolean exceedsDay(){
@@ -18,8 +18,9 @@ public class StudySessionDay extends StudySession {
         return timeFirstDay;
     }
 
+    // Changes from 1-7 and 1-31 depending on usage
     public int getDay() {
-        return this.day - 1;
+        return this.date - 1;
     }
 
 }
