@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Description;
@@ -31,6 +32,7 @@ public class Statistics extends AppCompatActivity {
     BarChart barChart;
     ImageView upButton;
     ImageView okButton;
+    TextView customLegend;
 
     // Database Variables
     HouseLevelDbHelper dbHouses;
@@ -61,6 +63,7 @@ public class Statistics extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistics);
 
+        customLegend = findViewById(R.id.custom_legend);
         okButton = findViewById(R.id.ok_button);
         upButton = findViewById(R.id.statistics_up_button);
         upButton.setOnClickListener(new View.OnClickListener() {
@@ -274,12 +277,13 @@ public class Statistics extends AppCompatActivity {
     }
 
     public void setUpGraph(BarChart barChart) {
+
         beginSearch();
         updateEntries();
         addToArrayGraph();
         addToEntryList();
         BarDataSet barDataSet = new BarDataSet(sessionsToDisplay, "STUDY SESSIONS");
-        int[] colorBars = {R.color.orange};
+        int[] colorBars = {R.color.orange, R.color.turquoise};
         barDataSet.setColors(colorBars, this);
         BarData barData = new BarData();
         barData.addDataSet(barDataSet);
@@ -300,36 +304,38 @@ public class Statistics extends AppCompatActivity {
         barChart.getXAxis().setTextColor(getResources().getColor(R.color.whiteText));
         barChart.getAxisRight().setDrawLabels(false);
 
-        //set y-axis and x-axis labels based on timeperiod and Legend's color & description
+        //set y-axis and x-axis labels based on timeperiod and Legend textView
         Legend legend = barChart.getLegend();
-        legend.setTextColor(R.color.whiteText);
-        legend.setTextSize(30);
-        List<LegendEntry> entries = new ArrayList<>();
-        LegendEntry entry = new LegendEntry();
-        entry.formColor = R.color.orange;
-        legend.setCustom(entries);
+        legend.setEnabled(false);
 
         if (timePeriod.equals("Day")) {
+            ArrayList<String> labels = new ArrayList<>();
+            for( int i=0; i<= 24; i++){
+                labels.add("" + i);
+            }
+            barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
+            barChart.getXAxis().setLabelCount(24);
             barChart.getAxisLeft().setAxisMaximum(60);
-            entry.label = "Minutes"; //only in terms of Day, the bars are in terms of Minutes
-            entries.add(entry);
-            legend.setCustom(entries);
+            customLegend.setText("In Minutes");
         } else if (timePeriod.equals("Week")) {
             String[] labels = {"", "MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"}; //have to add extra "" at start to push MON to index 1.
             barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
+            barChart.getXAxis().setLabelCount(7);
             barChart.getAxisLeft().setAxisMaximum(24);
-            entry.label = "Hours";
-            entries.add(entry);
-            legend.setCustom(entries);
+            customLegend.setText("In Hours");
         } else if (timePeriod.equals("Month")) {
+            ArrayList<String> labels = new ArrayList<>();
+            for( int i=0; i<=calendar.getActualMaximum(Calendar.DAY_OF_MONTH); i++){
+                labels.add("" + i);
+            }
+            barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
             barChart.getAxisLeft().setAxisMaximum(24);
-            entry.label = "Hours";
-            entries.add(entry);
-            legend.setCustom(entries);
+            customLegend.setText("In Hours");
         } else {
-            entry.label = "Hours";
-            entries.add(entry);
-            legend.setCustom(entries);
+            String[] labels = {"", "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"}; //have to add extra "" at start to push MON to index 1.
+            barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
+            barChart.getXAxis().setLabelCount(12);
+            customLegend.setText("In Hours");
         }
         barChart.getAxisLeft().setAxisMinimum(0);
 
