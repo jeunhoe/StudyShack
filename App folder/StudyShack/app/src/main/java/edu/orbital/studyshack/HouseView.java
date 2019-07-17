@@ -1,6 +1,8 @@
 package edu.orbital.studyshack;
 
+import android.app.ActivityManager;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import me.tankery.lib.circularseekbar.CircularSeekBar;
@@ -170,8 +173,7 @@ public class HouseView extends AppCompatActivity {
     }
 
     public void startTimer() {
-
-        seekBar.setVisibility(View.INVISIBLE);
+        makeButtonsInvisible();
         long millis = System.currentTimeMillis();
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(millis);
@@ -183,8 +185,6 @@ public class HouseView extends AppCompatActivity {
         currentHour = cal.get(Calendar.HOUR_OF_DAY);
         currentMinute = cal.get(Calendar.MINUTE);
 
-        upgradeButton.setVisibility(View.INVISIBLE);
-
 
         mCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 1000) {
             @Override
@@ -195,7 +195,6 @@ public class HouseView extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                seekBar.setVisibility(View.VISIBLE);
 
                 mTimerRunning = false;
                 mButtonStartStop.setText("START");
@@ -238,8 +237,7 @@ public class HouseView extends AppCompatActivity {
     }
 
     public void stopTimer() {
-        seekBar.setVisibility(View.VISIBLE);
-        
+        makeButtonsVisible();
         mCountDownTimer.cancel();
         mTimerRunning = false;
         mTimeLeftInMillis = mStartTimeInMillis;
@@ -275,6 +273,7 @@ public class HouseView extends AppCompatActivity {
 
     @Override
     protected void onStart() {
+        Log.d("activity", "onStart");
         super.onStart();
         db = dbH.getWritableDatabase();
         dbspecific = dbHspecific.getWritableDatabase();
@@ -282,6 +281,7 @@ public class HouseView extends AppCompatActivity {
 
     @Override
     protected void onStop() {
+        Log.d("activity", "onStop");
         super.onStop();
         db.close();
         dbHspecific.close();
@@ -289,11 +289,13 @@ public class HouseView extends AppCompatActivity {
 
     @Override
     protected void onPause() {
+        Log.d("activity", "onPause");
         super.onPause();
     }
 
     @Override
     protected void onResume() {
+        Log.d("activity", "onResume");
         super.onResume();
         db = dbH.getWritableDatabase();
         dbspecific = dbHspecific.getWritableDatabase();
@@ -321,6 +323,7 @@ public class HouseView extends AppCompatActivity {
 
         if (houselevel == 5) {
             Log.d("HouseView", "House is already max level");
+            checkUpgrade();
         } else {
             housetiming = getTotaltime(dbspecific, housename);
             checkUpgrade();
@@ -335,6 +338,20 @@ public class HouseView extends AppCompatActivity {
         } else {
             upgradeButton.setVisibility((View.INVISIBLE));
         }
+    }
+
+    public void makeButtonsInvisible() {
+        seekBar.setVisibility(View.INVISIBLE);
+        settingsButton.setVisibility(View.INVISIBLE);
+        upButton.setVisibility(View.INVISIBLE);
+        upgradeButton.setVisibility(View.INVISIBLE);
+    }
+
+    public void makeButtonsVisible(){
+        seekBar.setVisibility(View.VISIBLE);
+        settingsButton.setVisibility(View.VISIBLE);
+        upButton.setVisibility(View.VISIBLE);
+        checkUpgrade();
     }
 
     @Override

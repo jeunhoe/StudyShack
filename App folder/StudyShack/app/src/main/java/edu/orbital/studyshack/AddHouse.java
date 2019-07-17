@@ -83,7 +83,7 @@ public class AddHouse extends AppCompatActivity {
         if (row == -1) {
             Toast.makeText(getApplicationContext(), "Error! Please try again.", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(getApplicationContext(), "House added!", Toast.LENGTH_LONG).show();
+            onBackPressed();
         }
 
         //db.close();
