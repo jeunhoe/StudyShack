@@ -195,7 +195,7 @@ public class HouseView extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-
+                makeButtonsVisible();
                 mTimerRunning = false;
                 mButtonStartStop.setText("START");
                 mTextViewCountdown.setText("00:00");
