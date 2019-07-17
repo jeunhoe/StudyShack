@@ -25,9 +25,8 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="12dp"
-        android:background="@null"
-        android:popupBackground="@android:color/transparent"
-
+        android:background="@android:color/transparent"
+        android:popupBackground="@android:color/black"
         android:spinnerMode="dropdown"/>
 
     <Spinner
@@ -36,18 +35,20 @@
         android:layout_height="50dp"
         android:layout_below="@id/spinner_house_name"
         android:layout_centerHorizontal="true"
-        android:background="@null"
-        android:popupBackground="@android:color/transparent"
+        android:background="@android:color/transparent"
+        android:popupBackground="@android:color/black"
         android:spinnerMode="dropdown" />
 
-    <Button
-        android:id="@+id/button"
+    <ImageView
+        android:id="@+id/ok_button"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:text="OK"
         android:layout_toRightOf="@id/spinner_house_name"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="37dp"
+        android:layout_marginTop="27dp"
+        app:srcCompat="@drawable/ok_button"
+        android:onClick="changeFilters"
         />
 
 

@@ -24,6 +24,7 @@ public class Statistics extends AppCompatActivity {
 
     BarChart barChart;
     ImageView upButton;
+    ImageView okButton;
 
     // Database Variables
     HouseLevelDbHelper dbHouses;
@@ -58,7 +59,7 @@ public class Statistics extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
+        okButton = findViewById(R.id.ok_button);
 
 //        ArrayList<BarEntry> barEntries = new ArrayList<>();
 //        barEntries.add(new BarEntry(44f, 0));
@@ -130,10 +131,12 @@ public class Statistics extends AppCompatActivity {
 
         //create an adapter to describe how the items are displayed, adapters are used in several places in android.
         //There are multiple variations of this, but this is the basic variant.
-        ArrayAdapter<String> adapterTime = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, timeFilter);
-        ArrayAdapter<String> adapterName = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, houseNameList);
+        ArrayAdapter<String> adapterTime = new ArrayAdapter<>(this, R.layout.spinner_items, timeFilter);
+        ArrayAdapter<String> adapterName = new ArrayAdapter<>(this, R.layout.spinner_items, houseNameList);
 
         //set the spinners adapter to the previously created one.
+        adapterName.setDropDownViewResource(R.layout.spinner_items);
+        adapterTime.setDropDownViewResource(R.layout.spinner_items);
         houseNameDropdown.setAdapter(adapterName);
         timeFilterDropdown.setAdapter(adapterTime);
     }
@@ -155,7 +158,7 @@ public class Statistics extends AppCompatActivity {
 //        }
 //    }
 
-    public void changeFilters() {
+    public void changeFilters(View view) {
         houseName = (String) houseNameDropdown.getSelectedItem();
         timePeriod = (String) timeFilterDropdown.getSelectedItem();
     }
@@ -220,7 +223,5 @@ public class Statistics extends AppCompatActivity {
             xValue++;
         }
     }
-
-
 
 }
