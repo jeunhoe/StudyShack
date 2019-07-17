@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -39,7 +41,7 @@ public class Statistics extends AppCompatActivity {
 
     // Filters
     String houseName = "ALL";
-    String timePeriod = "DAY";
+    String timePeriod = "Day";
 
     Calendar calendar = Calendar.getInstance();
     Cursor search;
@@ -52,6 +54,7 @@ public class Statistics extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistics);
 
+        okButton = findViewById(R.id.ok_button);
         upButton = findViewById(R.id.statistics_up_button);
         upButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,24 +62,6 @@ public class Statistics extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        okButton = findViewById(R.id.ok_button);
-
-//        ArrayList<BarEntry> barEntries = new ArrayList<>();
-//        barEntries.add(new BarEntry(44f, 0));
-//        barEntries.add(new BarEntry(30f, 1));
-//        barEntries.add(new BarEntry(20f, 2));
-//        barEntries.add(new BarEntry(10f, 3));
-//        barEntries.add(new BarEntry(5f, 4));
-//        barEntries.add(new BarEntry(28f, 5));
-//        BarDataSet barDataSet = new BarDataSet(barEntries, "Dates");
-//
-//        BarData barData = new BarData();
-//        barData.addDataSet(barDataSet);
-//
-//        barChart.setData(barData);
-//        barChart.invalidate();
-
-
 
         setupDatabase();
         readDatabaseBasic();
@@ -93,6 +78,24 @@ public class Statistics extends AppCompatActivity {
         barData.addDataSet(barDataSet);
 
         barChart.setData(barData);
+
+        //removing legend
+        Legend legend = barChart.getLegend();
+        legend.setEnabled(false);
+
+        //removing description
+        barChart.getDescription().setEnabled(false);
+
+        //removing grid behind
+        barChart.getAxisRight().setDrawGridLines(false);
+        barChart.getAxisLeft().setDrawGridLines(false);
+        barChart.getXAxis().setDrawGridLines(false);
+
+        //Set axis colors
+        barChart.getAxisLeft().setTextColor(getResources().getColor(R.color.whiteText));
+        barChart.getXAxis().setTextColor(getResources().getColor(R.color.whiteText));
+        barChart.getAxisRight().setDrawLabels(false);
+
         barChart.setDragEnabled(false);
         barChart.setScaleEnabled(false);
         barChart.invalidate();
@@ -109,7 +112,7 @@ public class Statistics extends AppCompatActivity {
     public void readDatabaseBasic() {
         // Clears initial list
         this.houseNameList = new LinkedList<>();
-        houseNameList.add("All Houses");
+        houseNameList.add("ALL");
 
         // Read from dbHousesSQL (Read basic data into list of houses)
         Cursor c = dbHousesSQL.rawQuery("select " + HouseLevelDbHelper.KEY_NAME + " from " + HouseLevelDbHelper.TABLE_NAME, null);
@@ -161,6 +164,7 @@ public class Statistics extends AppCompatActivity {
     public void changeFilters(View view) {
         houseName = (String) houseNameDropdown.getSelectedItem();
         timePeriod = (String) timeFilterDropdown.getSelectedItem();
+        beginSearch();
     }
 
     public void beginSearch() {
@@ -169,7 +173,7 @@ public class Statistics extends AppCompatActivity {
         String month = "" + calendar.get(Calendar.MONTH);
         String year = "" + calendar.get(Calendar.YEAR);
 
-        if (timePeriod.equals("DAY")) {
+        if (timePeriod.equals("Day")) {
             String query = "select hour, minutes, input from HouseInputs WHERE date = " + "\"" + day + "\"" + " AND month = "
                     + "\"" + month + "\"" + " AND year = " + "\"" + year + "\"";
             if (!houseName.equals("ALL")) {

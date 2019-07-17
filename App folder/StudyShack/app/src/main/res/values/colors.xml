@@ -7,4 +7,7 @@
     <color name="whiteTextHint">#4AF7F9E4</color>
     <color name="cardview_label">#1fb085</color>
     <color name="card_background">#d0d0ce</color>
+    <color name="dark_background_spinner">#1b2d2c</color>
+    <color name="orange">#f4b551</color>
+    <color name="turquoise">#54cab9</color>
 </resources>
