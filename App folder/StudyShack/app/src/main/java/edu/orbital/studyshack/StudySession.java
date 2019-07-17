@@ -1,9 +1,9 @@
 package edu.orbital.studyshack;
 
 public class StudySession {
-    private int hour;
-    private int minute;
-    private int timeSpent;
+    protected int hour;
+    protected int minute;
+    protected int timeSpent;
 
     public StudySession(int hour, int minute, int timeSpent) {
         this.hour = hour;

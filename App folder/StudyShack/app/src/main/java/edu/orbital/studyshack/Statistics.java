@@ -46,6 +46,9 @@ public class Statistics extends AppCompatActivity {
     Calendar calendar = Calendar.getInstance();
     Cursor search;
     LinkedList<StudySession> studySessions;
+    LinkedList<StudySessionDay> studySessionsDay;
+    LinkedList<StudySessionMonth> studySessionsMonth;
+
     int[] graphOfStudySessions;
     LinkedList<BarEntry> sessionsToDisplay;
 
@@ -165,16 +168,48 @@ public class Statistics extends AppCompatActivity {
         houseName = (String) houseNameDropdown.getSelectedItem();
         timePeriod = (String) timeFilterDropdown.getSelectedItem();
         beginSearch();
+        updateEntries();
+        addToArrayGraph();
+        addToEntryList();
+        BarDataSet barDataSet = new BarDataSet(sessionsToDisplay, "STUDY SESSIONS");
+        BarData barData = new BarData();
+        barData.addDataSet(barDataSet);
+
+        barChart.setData(barData);
+
+        //removing legend
+        Legend legend = barChart.getLegend();
+        legend.setEnabled(false);
+
+        //removing description
+        barChart.getDescription().setEnabled(false);
+
+        //removing grid behind
+        barChart.getAxisRight().setDrawGridLines(false);
+        barChart.getAxisLeft().setDrawGridLines(false);
+        barChart.getXAxis().setDrawGridLines(false);
+
+        //Set axis colors
+        barChart.getAxisLeft().setTextColor(getResources().getColor(R.color.whiteText));
+        barChart.getXAxis().setTextColor(getResources().getColor(R.color.whiteText));
+        barChart.getAxisRight().setDrawLabels(false);
+
+        barChart.setDragEnabled(false);
+        barChart.setScaleEnabled(false);
+        barChart.invalidate();
     }
 
+    //just to set the cursor and the length of the array for the x-axis
     public void beginSearch() {
-        String day = "" + calendar.get(Calendar.DAY_OF_MONTH);
+        String day = "" + calendar.get(Calendar.DAY_OF_WEEK);
+        String date = "" + calendar.get(Calendar.DAY_OF_MONTH);
         String week = "" + calendar.get(Calendar.WEEK_OF_YEAR);
         String month = "" + calendar.get(Calendar.MONTH);
         String year = "" + calendar.get(Calendar.YEAR);
 
+
         if (timePeriod.equals("Day")) {
-            String query = "select hour, minutes, input from HouseInputs WHERE date = " + "\"" + day + "\"" + " AND month = "
+            String query = "select hour, minutes, input from HouseInputs WHERE date = " + "\"" + date + "\"" + " AND month = "
                     + "\"" + month + "\"" + " AND year = " + "\"" + year + "\"";
             if (!houseName.equals("ALL")) {
                 query = query + " AND housename = ?" ;
@@ -183,45 +218,80 @@ public class Statistics extends AppCompatActivity {
                 search = dbSpecificSQL.rawQuery(query, null); // ALL SEARCH
             }
                 graphOfStudySessions = new int[24];
+        } else if (timePeriod.equals("Week")) {
+            String query = "select day, hour, minutes, input from HouseInputs WHERE week = " + "\"" + week + "\"" + " AND year = " + "\"" + year + "\"";
+            if (!houseName.equals("ALL")) {
+                query = query + " AND housename = ?" ;
+                search = dbSpecificSQL.rawQuery(query, null); // SPECIFIC SEARCH
+            } else {
+                search = dbSpecificSQL.rawQuery(query, null); // ALL SEARCH
+            }
+            graphOfStudySessions = new int[7];
+            //graphOfStudySessions = new int[calendar.getActualMaximum(Calendar.DAY_OF_MONTH)];
         }
     }
 
 
     public void updateEntries() {
-        studySessions = new LinkedList<>();
-        while(search.moveToNext()) {
-            int hour = search.getInt(0);
-            int min = search.getInt(1);
-            int input = search.getInt(2);
-            studySessions.add(new StudySession(search.getInt(0), search.getInt(1), search.getInt(2)));
+        if (timePeriod.equals("Day")) {
+            studySessions = new LinkedList<>();
+            while (search.moveToNext()) {
+                int hour = search.getInt(0);
+                int min = search.getInt(1);
+                int input = search.getInt(2);
+                studySessions.add(new StudySession(hour, min, input));
+            }
+        } else if (timePeriod.equals("Week")) {
+            studySessionsDay = new LinkedList<>();
+            while (search.moveToNext()) {
+                int day = search.getInt(0);
+                int hour = search.getInt(1);
+                int min = search.getInt(2);
+                int input = search.getInt(3);
+                studySessionsDay.add(new StudySessionDay(day, hour, min, input));
+
+            }
         }
     }
 
     public void addToArrayGraph() {
-        while(!studySessions.isEmpty()) {
-            StudySession session = studySessions.poll();
-            if (session.exceedsFirstHour()) {
-                int firstHourStudied = session.getHour();
-                graphOfStudySessions[firstHourStudied] += session.clockFirstHour();
-                if (session.exceedsSecondHour()){
-                    int secondHourStudied = session.getHour();
-                    graphOfStudySessions[secondHourStudied] += session.clockSecondHour();
-                    int thirdHourStudied = session.getHour();
-                    graphOfStudySessions[thirdHourStudied] += session.clockRemaining();
+        if (timePeriod.equals("Day")) {
+            while (!studySessions.isEmpty()) {
+                StudySession session = studySessions.poll();
+                if (session.exceedsFirstHour()) {
+                    int firstHourStudied = session.getHour();
+                    graphOfStudySessions[firstHourStudied] += session.clockFirstHour();
+                    if (session.exceedsSecondHour()) {
+                        int secondHourStudied = session.getHour();
+                        graphOfStudySessions[secondHourStudied] += session.clockSecondHour();
+                        int thirdHourStudied = session.getHour();
+                        graphOfStudySessions[thirdHourStudied] += session.clockRemaining();
+                    } else {
+                        int secondHourStudied = session.getHour();
+                        graphOfStudySessions[secondHourStudied] += session.clockRemaining();
+                    }
                 } else {
-                    int secondHourStudied = session.getHour();
-                    graphOfStudySessions[secondHourStudied] += session.clockRemaining();
+                    int firstHourStudied = session.getHour();
+                    graphOfStudySessions[firstHourStudied] += session.clockRemaining();
                 }
-            } else {
-                int firstHourStudied = session.getHour();
-                graphOfStudySessions[firstHourStudied] += session.clockRemaining();
+            }
+        } else if (timePeriod.equals("Week")) {
+            while (!studySessionsDay.isEmpty()){
+                StudySessionDay session = studySessionsDay.poll();
+                if (session.exceedsDay()) {
+                    int getFirstDay = session.getDay();
+                    graphOfStudySessions[getFirstDay] += session.clockDay();
+                    graphOfStudySessions[getFirstDay + 1] += session.clockRemaining();
+                } else {
+                    graphOfStudySessions[session.getDay()] += session.clockRemaining();
+                }
             }
         }
     }
 
     public void addToEntryList() {
         sessionsToDisplay = new LinkedList<>();
-        float xValue = 0;
+        float xValue = 1;
         for (Integer timeSpent: graphOfStudySessions) {
             sessionsToDisplay.add(new BarEntry(xValue, (float) timeSpent));
             xValue++;
