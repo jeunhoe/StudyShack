@@ -38,9 +38,11 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        app:layout_constraintTop_toBottomOf="@id/info_page_header">
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/info_page_header"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <!--the tricks is make layoutheight = 0 and constraintbottom_tobottomof parent to make scroll view scroll entirely-->
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"

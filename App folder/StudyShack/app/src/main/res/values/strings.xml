@@ -31,5 +31,8 @@
     <string name="second_info">Note:
         \nIf you leave the app or stop the timer halfway, all recorded progress for that session so far will not be recorded!
         \n\n3. Track your study sessions:
-        \nIn the Statistics tab, you can also filter the graph by both Houses and Time period too!</string>
+        \nIn the Statistics tab, you can also filter the graph by both Houses and Time period too!
+        \n\nMade by: Lyndon Lim and  Poon Jeun Hoe (Orbital Project)
+        \n\n
+    </string>
 </resources>
