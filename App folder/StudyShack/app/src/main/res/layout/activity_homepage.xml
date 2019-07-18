@@ -21,6 +21,17 @@
         app:srcCompat="@drawable/studyshacklogo" />
 
     <ImageView
+        android:id="@+id/info_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="25dp"
+        android:layout_marginRight="20dp"
+        app:srcCompat="@drawable/yinfo_button"
+        android:onClick="openInfoPage"/>
+
+    <ImageView
         android:id="@+id/houses_button"
         android:layout_width="313dp"
         android:layout_height="82dp"

@@ -284,6 +284,7 @@ public class Statistics extends AppCompatActivity {
         addToEntryList();
         BarDataSet barDataSet = new BarDataSet(sessionsToDisplay, "STUDY SESSIONS");
         int[] colorBars = {R.color.orange, R.color.turquoise};
+        barDataSet.setDrawValues(false);
         barDataSet.setColors(colorBars, this);
         BarData barData = new BarData();
         barData.addDataSet(barDataSet);
@@ -294,7 +295,7 @@ public class Statistics extends AppCompatActivity {
         barChart.getDescription().setEnabled(false);
 
         //removing grid behind
-        barChart.getAxisRight().setDrawGridLines(false);
+        barChart.getAxisRight().setDrawGridLines(true);
         barChart.getAxisLeft().setDrawGridLines(false);
         barChart.getXAxis().setDrawGridLines(false);
         barChart.getAxisLeft().setDrawZeroLine(true);
@@ -310,29 +311,26 @@ public class Statistics extends AppCompatActivity {
 
         if (timePeriod.equals("Day")) {
             ArrayList<String> labels = new ArrayList<>();
-            for( int i=0; i<= 24; i++){
+            for( int i=0; i<= 24; i++){ //25 inputs to push '1' to index 1
                 labels.add("" + i);
             }
             barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
             barChart.getXAxis().setLabelCount(24);
-            barChart.getAxisLeft().setAxisMaximum(60);
             customLegend.setText("In Minutes");
         } else if (timePeriod.equals("Week")) {
             String[] labels = {"", "MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"}; //have to add extra "" at start to push MON to index 1.
             barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
             barChart.getXAxis().setLabelCount(7);
-            barChart.getAxisLeft().setAxisMaximum(24);
             customLegend.setText("In Hours");
         } else if (timePeriod.equals("Month")) {
             ArrayList<String> labels = new ArrayList<>();
-            for( int i=0; i<=calendar.getActualMaximum(Calendar.DAY_OF_MONTH); i++){
+            for( int i=0; i<=calendar.getActualMaximum(Calendar.DAY_OF_MONTH); i++){ //inputs 1 more than number of days in a month to push '1' to index 1
                 labels.add("" + i);
             }
             barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
-            barChart.getAxisLeft().setAxisMaximum(24);
             customLegend.setText("In Hours");
         } else {
-            String[] labels = {"", "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"}; //have to add extra "" at start to push MON to index 1.
+            String[] labels = {"", "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"}; //have to add extra "" at start to push JAN to index 1.
             barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
             barChart.getXAxis().setLabelCount(12);
             customLegend.setText("In Hours");

@@ -40,4 +40,9 @@ public class Homepage extends AppCompatActivity {
         Intent intent = new Intent (this, HouseCardview.class);
         startActivity(intent);
     }
+
+    public void openInfoPage(View view) {
+        Intent intent = new Intent(this, infoPage.class);
+        startActivity(intent);
+    }
 }

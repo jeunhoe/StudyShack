@@ -9,10 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".infoPage"></activity>
         <activity
             android:name=".HouseSettings"
-            android:parentActivityName=".HouseView"
-            android:noHistory="true"/>
+            android:noHistory="true"
+            android:parentActivityName=".HouseView" />
         <activity
             android:name=".AddHouse"
             android:parentActivityName=".HouseCardview"
