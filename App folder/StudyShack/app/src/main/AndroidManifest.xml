@@ -9,7 +9,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".infoPage"></activity>
         <activity
             android:name=".HouseSettings"
             android:noHistory="true"
@@ -24,10 +23,14 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Statistics"
-            android:parentActivityName=".HouseCardview"
+            android:parentActivityName=".Homepage"
             android:screenOrientation="portrait" />
         <activity
             android:name=".HouseCardview"
+            android:parentActivityName=".Homepage"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".infoPage"
             android:parentActivityName=".Homepage"
             android:screenOrientation="portrait" />
         <activity

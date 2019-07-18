@@ -1,10 +1,14 @@
 package edu.orbital.studyshack;
 
+import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.Image;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -12,14 +16,20 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.IMarker;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LegendEntry;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
@@ -276,7 +286,8 @@ public class Statistics extends AppCompatActivity {
         }
     }
 
-    public void setUpGraph(BarChart barChart) {
+    @SuppressLint("ClickableViewAccessibility")
+    public void setUpGraph(final BarChart barChart) {
 
         beginSearch();
         updateEntries();
@@ -286,7 +297,7 @@ public class Statistics extends AppCompatActivity {
         int[] colorBars = {R.color.orange, R.color.turquoise};
         barDataSet.setDrawValues(false);
         barDataSet.setColors(colorBars, this);
-        BarData barData = new BarData();
+        final BarData barData = new BarData();
         barData.addDataSet(barDataSet);
 
         barChart.setData(barData);
@@ -294,10 +305,10 @@ public class Statistics extends AppCompatActivity {
         //removing description
         barChart.getDescription().setEnabled(false);
 
-        //removing grid behind
+        //grid setting, removing gridlines and position of axis
+        barChart.getXAxis().setDrawGridLines(false);
         barChart.getAxisRight().setDrawGridLines(true);
         barChart.getAxisLeft().setDrawGridLines(false);
-        barChart.getXAxis().setDrawGridLines(false);
         barChart.getAxisLeft().setDrawZeroLine(true);
 
         //Set axis colors
@@ -311,7 +322,7 @@ public class Statistics extends AppCompatActivity {
 
         if (timePeriod.equals("Day")) {
             ArrayList<String> labels = new ArrayList<>();
-            for( int i=0; i<= 24; i++){ //25 inputs to push '1' to index 1
+            for (int i = 0; i <= 24; i++) { //25 inputs to push '1' to index 1
                 labels.add("" + i);
             }
             barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
@@ -324,7 +335,7 @@ public class Statistics extends AppCompatActivity {
             customLegend.setText("In Hours");
         } else if (timePeriod.equals("Month")) {
             ArrayList<String> labels = new ArrayList<>();
-            for( int i=0; i<=calendar.getActualMaximum(Calendar.DAY_OF_MONTH); i++){ //inputs 1 more than number of days in a month to push '1' to index 1
+            for (int i = 0; i <= calendar.getActualMaximum(Calendar.DAY_OF_MONTH); i++) { //inputs 1 more than number of days in a month to push '1' to index 1
                 labels.add("" + i);
             }
             barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
@@ -337,10 +348,58 @@ public class Statistics extends AppCompatActivity {
         }
         barChart.getAxisLeft().setAxisMinimum(0);
 
-    //setting graph drag/touch enabled = false and refresh drawing of graph
+        //setting highlight values
+        barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() { //to set timer for how long the highlight for clicking stays
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                final Handler handler = new Handler();
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        barChart.highlightValues(null);
+                    }
+                };
+                //un-highlight after 3 seconds
+                handler.postDelayed(runnable, 3000);
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
+
+        barChart.setTouchEnabled(true);
+        barChart.setHighlightPerDragEnabled(false);
+        barData.setHighlightEnabled(true);
+        IMarker marker = new IndividualMarkerView(getApplicationContext(), R.layout.tv_content);
+        barChart.setMarker(marker);
+
+//        //Action_up works, but not sure how the graph works, where action_down dont initialize the highlight. No idea what initializes the highlight
+//        barChart.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                switch (event.getAction()){
+//                    case MotionEvent.ACTION_DOWN:
+//                        Log.d("debug", "tapped");
+//                        barData.setHighlightEnabled(true);
+//                        IMarker marker = new IndividualMarkerView(getApplicationContext(), R.layout.tv_content);
+//                        barChart.setMarker(marker);
+//                        break;
+//                    case MotionEvent.ACTION_UP:
+//                        Log.d("debug", "released");
+//                        barChart.highlightValues(null);
+//                        Log.d("debug", "highlightvalue nulled");
+//                        break;
+//                }
+//                return false;
+//            }
+//        });
+
+        //setting graph drag/touch enabled = false and refresh drawing of graph
         barChart.setDragEnabled(false);
         barChart.setScaleEnabled(false);
         barChart.invalidate();
-}
+    }
 
 }
