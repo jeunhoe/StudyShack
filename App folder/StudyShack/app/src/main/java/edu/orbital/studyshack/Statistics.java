@@ -402,4 +402,9 @@ public class Statistics extends AppCompatActivity {
         barChart.invalidate();
     }
 
+    @Override
+    public void onBackPressed() {
+        Log.d("activity", "Back button pressed!");
+        super.onBackPressed();
+    }
 }

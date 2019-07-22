@@ -34,17 +34,26 @@ public class HouseSettings extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_house_settings);
 
+        setupDatabase();
+        setupLayout();
+
+    }
+
+    public void setupDatabase() {
         dbH = new HouseLevelDbHelper(this);
         db = dbH.getWritableDatabase();
         dbHspecific = new HouseDbHelper(this);
         dbspecific = dbHspecific.getWritableDatabase();
+    }
 
+    public void setupLayout() {
+        // Receiving Intent
+        Intent intent = getIntent();
+        origHouseName = intent.getStringExtra("HOUSE_NAME");
+        origHouseDesc = intent.getStringExtra("HOUSE_DESC");
+
+        // Up Button
         mUpButton = findViewById(R.id.house_settings_up_button);
-        mHouseNameEditText = findViewById(R.id.house_settings_name_edit_text);
-        mHouseDescEditText = findViewById(R.id.house_settings_description_edit_text);
-        mEditButton = findViewById(R.id.house_settings_edit_button);
-        mDeleteButton = findViewById(R.id.house_settings_delete_button);
-
         mUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,12 +61,16 @@ public class HouseSettings extends AppCompatActivity {
             }
         });
 
-        Intent intent = getIntent();
-        origHouseName = intent.getStringExtra("HOUSE_NAME");
-        origHouseDesc = intent.getStringExtra("HOUSE_DESC");
+        // House Name Edit Text
+        mHouseNameEditText = findViewById(R.id.house_settings_name_edit_text);
         mHouseNameEditText.setText(origHouseName);
+
+        // House Description Edit Text
+        mHouseDescEditText = findViewById(R.id.house_settings_description_edit_text);
         mHouseDescEditText.setText(origHouseDesc);
 
+        // Edit Button
+        mEditButton = findViewById(R.id.house_settings_edit_button);
         mEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,8 +81,7 @@ public class HouseSettings extends AppCompatActivity {
                     String newHouseName = mHouseNameEditText.getText().toString();
                     String newHouseDesc = mHouseDescEditText.getText().toString();
 
-                    //edited HouseLevelDB db
-                    // Cardview database
+                    // Change db (General database which only contains house info)
                     Cursor dbCursor = db.rawQuery("select " + HouseLevelDbHelper.KEY_LEVEL + " from " + HouseLevelDbHelper.TABLE_NAME + " where " +
                             HouseLevelDbHelper.KEY_NAME + " = ?", new String[]{origHouseName});
                     dbCursor.moveToFirst();
@@ -80,8 +92,7 @@ public class HouseSettings extends AppCompatActivity {
                     changedRow.put(HouseLevelDbHelper.KEY_LEVEL, dbCursor.getInt(0));
                     db.update(HouseLevelDbHelper.TABLE_NAME, changedRow, HouseLevelDbHelper.KEY_NAME + " = ?", new String[]{origHouseName});
 
-                    //edited HouseDB dbspecific
-                    // Specific database
+                    // Change dbSpecific (Changes name of house in all study sessions)
                     Cursor dbSpecificCursor = dbspecific.rawQuery("select * from " + HouseDbHelper.TABLE_NAME + " where " +
                             HouseDbHelper.KEY_NAME + " = ?", new String[]{origHouseName});
                     while (dbSpecificCursor.moveToNext()) {
@@ -102,7 +113,7 @@ public class HouseSettings extends AppCompatActivity {
 
                     }
 
-                    // Dialog pop up
+                    // Alert Dialog
                     AlertDialog.Builder alert = new AlertDialog.Builder(HouseSettings.this);
                     alert.setTitle("Success");
                     alert.setMessage("House successfully changed!");
@@ -112,6 +123,7 @@ public class HouseSettings extends AppCompatActivity {
                             Intent intent = new Intent(getApplicationContext(), HouseCardview.class);
                             startActivity(intent);
                             finish();
+                            onBackPressed();
 
                         }
                     });
@@ -121,6 +133,7 @@ public class HouseSettings extends AppCompatActivity {
             }
         });
 
+        mDeleteButton = findViewById(R.id.house_settings_delete_button);
         mDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -166,15 +179,9 @@ public class HouseSettings extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         db = dbH.getWritableDatabase();
         dbspecific = dbHspecific.getWritableDatabase();
-
     }
 }

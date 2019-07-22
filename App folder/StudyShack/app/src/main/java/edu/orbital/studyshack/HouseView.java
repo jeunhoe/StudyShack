@@ -71,38 +71,21 @@ public class HouseView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_house_view);
 
-        seekBar = findViewById(R.id.seek_bar);
-        seekBar.setOnSeekBarChangeListener(new CircularSeekBar.OnCircularSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(CircularSeekBar circularSeekBar, float progress, boolean fromUser) {
-                String message = String.format("%.0f", progress);
-                seekBarProgress = Integer.parseInt(message);
-                mTextViewCountdown.setText(message + ":00");
-            }
-
-            @Override
-            public void onStopTrackingTouch(CircularSeekBar seekBar) {
-                Log.d("Main", "onStopTrackingTouch");
-            }
-
-            @Override
-            public void onStartTrackingTouch(CircularSeekBar seekBar) {
-                Log.d("Main", "onStartTrackingTouch");
-            }
-        });
-
+        //instantiate both database
+        setupDatabase();
 
         // Tie layout files to java code
+        setupLayout();
+    }
 
+    public void setupLayout() {
+        // Receiving intent
+        housename = getIntent().getStringExtra("HOUSE_NAME");
+        housedesc = getIntent().getStringExtra("HOUSE_DESC");
+        houselevel = getIntent().getExtras().getInt("HOUSE_LEVEL");
+
+        // Up Button
         upButton = findViewById(R.id.house_view_up_button);
-        upgradeButton = findViewById(R.id.house_view_upgrade_button);
-        settingsButton = findViewById(R.id.house_view_settings_button);
-        houseViewHeader = findViewById(R.id.house_view_header);
-        houseImage = findViewById(R.id.houseview_house);
-
-        mTextViewCountdown = findViewById(R.id.text_view_countdown);
-        mButtonStartStop = findViewById(R.id.button_start_stop);
-
         upButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,6 +93,11 @@ public class HouseView extends AppCompatActivity {
             }
         });
 
+        // Upgrade Button
+        upgradeButton = findViewById(R.id.house_view_upgrade_button);
+
+        // Settings Button
+        settingsButton = findViewById(R.id.house_view_settings_button);
         settingsButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -121,25 +109,17 @@ public class HouseView extends AppCompatActivity {
             }
         });
 
-        //instantiate both database
-        dbH = new HouseLevelDbHelper(this);
-        db = dbH.getWritableDatabase();
-        dbHspecific = new HouseDbHelper(this);
-        dbspecific = dbHspecific.getWritableDatabase();
+        // House Label
+        houseViewHeader = findViewById(R.id.house_view_header);
 
-        //getting extras from the intent
-        housename = getIntent().getStringExtra("HOUSE_NAME");
-        housedesc = getIntent().getStringExtra("HOUSE_DESC");
-        houselevel = getIntent().getExtras().getInt("HOUSE_LEVEL");
+        // House Image
+        houseImage = findViewById(R.id.houseview_house);
 
-        //setting upgrade button visibility
-        housetiming = getTotaltime(dbspecific, housename);
-        checkUpgrade();
+        // Countdown Timer
+        mTextViewCountdown = findViewById(R.id.text_view_countdown);
 
-        //setting house image
-        houseImage.setImageResource(House.HOUSE_IMAGES[(houselevel - 1)]);
-        houseViewHeader.setText(housename);
-
+        // Start Button
+        mButtonStartStop = findViewById(R.id.button_start_stop);
         mButtonStartStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -171,7 +151,43 @@ public class HouseView extends AppCompatActivity {
             }
         });
 
+        // Circular Seek-Bar
+        seekBar = findViewById(R.id.seek_bar);
+        seekBar.setOnSeekBarChangeListener(new CircularSeekBar.OnCircularSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(CircularSeekBar circularSeekBar, float progress, boolean fromUser) {
+                String message = String.format("%.0f", progress);
+                seekBarProgress = Integer.parseInt(message);
+                mTextViewCountdown.setText(message + ":00");
+            }
+
+            @Override
+            public void onStopTrackingTouch(CircularSeekBar seekBar) {
+                Log.d("Main", "onStopTrackingTouch");
+            }
+
+            @Override
+            public void onStartTrackingTouch(CircularSeekBar seekBar) {
+                Log.d("Main", "onStartTrackingTouch");
+            }
+        });
+
+        // Update upgrade button
+        housetiming = getTotaltime(dbspecific, housename);
+        checkUpgrade();
+
+        // Update house image
+        houseImage.setImageResource(House.HOUSE_IMAGES[(houselevel - 1)]);
+        houseViewHeader.setText(housename);
+
         updateCountDownText();
+    }
+
+    public void setupDatabase() {
+        dbH = new HouseLevelDbHelper(this);
+        db = dbH.getWritableDatabase();
+        dbHspecific = new HouseDbHelper(this);
+        dbspecific = dbHspecific.getWritableDatabase();
     }
 
     public void startTimer() {
@@ -263,15 +279,11 @@ public class HouseView extends AppCompatActivity {
         String query = "select " + HouseDbHelper.KEY_INPUT + " from " + HouseDbHelper.TABLE_NAME + " where " + HouseDbHelper.KEY_NAME + " = " + "\"" + name + "\"";
         Cursor c = db.rawQuery(query, null);
         int result = 0;
-
         while (c.moveToNext()) {
             result += c.getInt(0);
         }
-
         return result;
-
     }
-
 
     @Override
     protected void onStart() {
@@ -287,12 +299,6 @@ public class HouseView extends AppCompatActivity {
         super.onStop();
         db.close();
         dbHspecific.close();
-    }
-
-    @Override
-    protected void onPause() {
-        Log.d("activity", "onPause");
-        super.onPause();
     }
 
     @Override
@@ -358,7 +364,6 @@ public class HouseView extends AppCompatActivity {
 
     @Override
     protected void onUserLeaveHint() {
-        Log.d("activity","Home button pressed");
         if (mTimerRunning) {
             stopTimer();
         }

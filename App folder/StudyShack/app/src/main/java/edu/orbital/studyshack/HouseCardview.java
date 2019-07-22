@@ -21,6 +21,7 @@ public class HouseCardview extends AppCompatActivity {
     private ImageView addButton;
 
     // Card View
+    private LinkedList<House> houses;
     private RecyclerView mRecyclerView;
     private HouseAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -30,8 +31,6 @@ public class HouseCardview extends AppCompatActivity {
     HouseDbHelper dbSpecific;
     SQLiteDatabase dbHousesSQL;
     SQLiteDatabase dbSpecificSQL;
-
-    private LinkedList<House> houses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
