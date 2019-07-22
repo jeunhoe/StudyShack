@@ -153,9 +153,10 @@ public class HouseCardview extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(getApplicationContext(), Homepage.class);
-        intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
-        startActivity(intent);
+//        Intent intent = new Intent(getApplicationContext(), Homepage.class);
+//        intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+//        startActivity(intent);
+        super.onBackPressed();
     }
 
     // Android Activity Lifecycle Methods

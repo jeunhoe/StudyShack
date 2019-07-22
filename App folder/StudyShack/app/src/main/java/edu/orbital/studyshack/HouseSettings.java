@@ -120,10 +120,9 @@ public class HouseSettings extends AppCompatActivity {
                     alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(getApplicationContext(), HouseCardview.class);
+                            Intent intent = new Intent(HouseSettings.this, HouseCardview.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
-                            finish();
-                            onBackPressed();
 
                         }
                     });
@@ -154,9 +153,9 @@ public class HouseSettings extends AppCompatActivity {
                         dbspecific.delete(HouseDbHelper.TABLE_NAME, dbSpecificSelection, dbSpecificSelectionArg);
 
                         // Navigate back to cardview
-                        Intent intent = new Intent(getApplicationContext(), HouseCardview.class);
+                        Intent intent = new Intent(HouseSettings.this, HouseCardview.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
-                        finish();
                     }
                 });
                 alert.show();
