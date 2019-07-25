@@ -172,7 +172,7 @@ public class Statistics extends AppCompatActivity {
             }
             graphOfStudySessions = new int[7];
         } else if (timePeriod.equals("Month")) {
-            String query = "select day, hour, minutes, input from HouseInputs WHERE month = " + "\"" + month + "\"" + " AND year = " + "\"" + year + "\"";
+            String query = "select date, hour, minutes, input from HouseInputs WHERE month = " + "\"" + month + "\"" + " AND year = " + "\"" + year + "\"";
             if (!houseName.equals("ALL")) {
                 query = query + " AND housename = " + "\"" + houseName + "\"";
                 search = dbSpecificSQL.rawQuery(query, null); // SPECIFIC SEARCH

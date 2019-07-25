@@ -22,17 +22,15 @@
         android:id="@+id/house_settings_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
         android:fontFamily="@font/quicksand_bold"
         android:text="@string/house_settings_label"
         android:textColor="@color/whiteText"
         android:textSize="36sp"
         android:textStyle="bold"
         android:typeface="normal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/house_settings_up_button"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
