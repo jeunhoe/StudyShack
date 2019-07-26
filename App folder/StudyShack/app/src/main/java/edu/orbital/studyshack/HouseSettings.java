@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class HouseSettings extends AppCompatActivity {
 
@@ -77,6 +78,9 @@ public class HouseSettings extends AppCompatActivity {
                 if ((origHouseName.equals(mHouseNameEditText.getText().toString())) &&
                         (origHouseDesc.equals(mHouseDescEditText.getText().toString()))) {
                     return; //do nothing
+                } else if (mHouseNameEditText.getText().toString().length() > 20) {
+                    Toast.makeText(getApplicationContext(), "Please shorten name to max 20 characters", Toast.LENGTH_LONG).show();
+                    return;
                 } else {
                     String newHouseName = mHouseNameEditText.getText().toString();
                     String newHouseDesc = mHouseDescEditText.getText().toString();

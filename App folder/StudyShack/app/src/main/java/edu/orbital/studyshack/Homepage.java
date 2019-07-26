@@ -17,7 +17,7 @@ public class Homepage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
-        //resetDatabase();
+//        resetDatabase();
     }
 
     public void openStatistics(View view) {
