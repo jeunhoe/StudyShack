@@ -261,7 +261,7 @@ public class HouseView extends AppCompatActivity {
         mTimeLeftInMillis = mStartTimeInMillis;
         updateCountDownText();
         mButtonStartStop.setText("START");
-        mTextViewCountdown.setText("00:00");
+        updateCountDownText();
 
         checkUpgrade();
     }

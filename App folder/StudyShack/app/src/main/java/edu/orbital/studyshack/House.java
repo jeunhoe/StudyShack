@@ -8,10 +8,10 @@ public class House {
     private int level;
     private int totalTime;
     private int totalTimeWeek;
-    public static final int lvl1time = 0;
-    public static final int lvl2time = 1;
-    public static final int lvl3time = 2;
-    public static final int lvl4time = 4;
+    public static final int lvl1time = 600;
+    public static final int lvl2time = 1200;
+    public static final int lvl3time = 2400;
+    public static final int lvl4time = 4800;
     public static final int lvl5time = Integer.MAX_VALUE;
 
     public House(String name, String desc, int level) {
