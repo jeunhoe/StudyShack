@@ -22,15 +22,15 @@
     <string name="time_to_upgrade_label">Time to upgrade:</string>
     <string name="default_time_label">0h 00m</string>
     <string name="first_info">StudyShack is a productivity app which acts as a soft lock for you, removing all distractions on your phone!
-        \n\nHow to play:
-        \n\n1. Create your own Houses:
-        \nIn the Houses tab, you can create as many houses as you want and edit them whenever you want!
-        \n\n2. Study Sessions:
+        \n\n<b><u>How does it work:</u></b>
+        \n\n<b>1. Create your own Houses:</b>
+        \nIn the Houses tab, you can create as many houses as you want and edit them whenever you want! Houses created represent areas or subjects you would like to focus on.
+        \n\n<b>2. Study Sessions:</b>
         \nYou can clock your study session in your specific house. Tap and drag on the SeekBar to adjust the how long you would like to study for.
         \nAfter clocking enough time in that house, you can even upgrade them! There is a total for 5 levels to reach! Study hard!</string>
     <string name="second_info">Note:
         \nIf you leave the app while the timer is still running or stop the timer halfway, all recorded progress for that session so far will not be recorded!
-        \n\n3. Track your study sessions:
+        \n\n<b>3. Track your study sessions:</b>
         \nIn the Statistics tab, you can also filter the graph by both Houses and Time period too!
         \n\nMade by: Lyndon Lim and  Poon Jeun Hoe (Orbital Project)
         \n\n

@@ -216,7 +216,7 @@ public class HouseView extends AppCompatActivity {
                 makeButtonsVisible();
                 mTimerRunning = false;
                 mButtonStartStop.setText("START");
-                mTextViewCountdown.setText("00:00");
+                updateCountDownText();
 
                 //specific database add input
                 ContentValues input = new ContentValues();
@@ -255,6 +255,24 @@ public class HouseView extends AppCompatActivity {
     }
 
     public void stopTimer() {
+//        // Extra
+//        ContentValues input = new ContentValues();
+//        input.put(HouseDbHelper.KEY_DAY, currentDay);
+//        input.put(HouseDbHelper.KEY_DATE, currentDate);
+//        input.put(HouseDbHelper.KEY_WEEK, currentWeek);
+//        input.put(HouseDbHelper.KEY_MONTH, currentMonth - 3);
+//        input.put(HouseDbHelper.KEY_YEAR, currentYear);
+//        input.put(HouseDbHelper.KEY_HOUR, currentHour);
+//        input.put(HouseDbHelper.KEY_MINS, currentMinute);
+//        input.put(HouseDbHelper.KEY_NAME, housename);
+//
+//        long timeInputlong = mStartTimeInMillis / (60 * 1000);
+//        timeInputlong = 120;
+//        int timeInput = (int) (long) timeInputlong;
+//        input.put(HouseDbHelper.KEY_INPUT, timeInput);
+//        long row = dbspecific.insert(HouseDbHelper.TABLE_NAME, null, input);
+
+        // Original
         makeButtonsVisible();
         mCountDownTimer.cancel();
         mTimerRunning = false;
@@ -264,6 +282,7 @@ public class HouseView extends AppCompatActivity {
         updateCountDownText();
 
         checkUpgrade();
+
     }
 
     public void updateCountDownText() {
